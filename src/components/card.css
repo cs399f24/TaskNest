@@ -1,0 +1,25 @@
+.todo-card {
+    max-width: 400px;
+    width: 100%;
+    height: 200px;
+    background-color: #FAF9F6;
+    padding: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.todo-card-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.todo-card h3 {
+    display: block;
+}
+
+.todo-card p {
+    display: block;
+    width: 80%;
+    text-align: left;
+}

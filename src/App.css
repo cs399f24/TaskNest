@@ -1,38 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Quicksand:wght@300..700&display=swap');
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  padding: 50px;
+  background: radial-gradient(circle at 10% 20%, rgb(233, 122, 129) 0%, rgb(181, 64, 149) 100.2%);
+  font-family: "Quicksand", sans-serif;
   min-height: 100vh;
+  height: 100%;
+}
+
+.todo-task-container {
+  margin: 0 auto;
+  max-width: 400px;
+  width: 100%;
+  height: 200px;
+  background-color: #fffffffa;
+  border-radius: 20px;
+  padding-left: 20px;
+  padding-top: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.todo-input-div {
+
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  width: 90%;
+  
+
+}
+
+.todo-input {
+  width: 70%;
+  height: 40px;
+  border: none;
+  background-color: #f1efefd1;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  font-family: "Quicksand", sans-serif;
+  font-size: 15px;
+
+}
+
+.todo-input[type=text] {
+  padding-left: 20px;
+}
+
+
+.todo-add-btn {
+  height: 41px;
+  max-width: 100px;
+  width: 100%;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: rgb(255, 85, 0);
+  border: none;
   color: white;
+  font-size: 20px;
+  font-family: "Quicksand", sans-serif;
+
+
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+
+.todo-grid {
+  margin: 0 auto;
+  margin-top: 100px;
+
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 40px;
+  width: 90%;
 }
