@@ -72,3 +72,33 @@
   gap: 40px;
   width: 90%;
 }
+
+
+@media screen and (max-width: 1250px) {
+  .todo-grid {
+    grid-template-columns: repeat(4,1fr);
+
+  }
+}
+
+
+@media screen and (max-width: 1000px) {
+  .todo-grid {
+    grid-template-columns: repeat(3,1fr);
+
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .todo-grid {
+    grid-template-columns: repeat(2,1fr);
+
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .todo-grid {
+    grid-template-columns: repeat(1,1fr);
+
+  }
+}

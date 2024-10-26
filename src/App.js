@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { Card } from './components/card';
 import { useState } from 'react';
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 
 function App() {
@@ -12,8 +12,12 @@ function App() {
 
 
   const createNewTask = () => {
-    setTask([...tasks, newTodo])
-    setNewTodo("")
+    if (newTodo != "") {
+      setTask([...tasks, newTodo])
+      setNewTodo("")
+  
+    }
+   
   }
 
 
@@ -21,13 +25,11 @@ function App() {
 
   return (
     <div className="App">
-
-
-      <motion.div 
-      className='todo-task-container'
-      initial={{ opacity: 0, y: -100 }}
-animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 2 }}
+      <motion.div
+        className='todo-task-container'
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 2 }}
 
       >
         <h2 className='title'>TaskNest</h2>
@@ -44,13 +46,13 @@ transition={{ duration: 2 }}
       </motion.div>
 
 
+
       <div className='todo-grid'>
-
-        {tasks.map((task,index) => (
-        
-          <Card number={index+1} description={task}/>
-        ))}
-
+        {
+        tasks.map((task, index) => (
+          <Card number={index + 1} description={task} />
+        ))
+        }
       </div>
 
     </div>
