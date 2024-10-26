@@ -30,7 +30,7 @@ animate={{ opacity: 1, y: 0 }}
 transition={{ duration: 2 }}
 
       >
-        <h2 className='title'>To-Do Cards</h2>
+        <h2 className='title'>TaskNest</h2>
         <div className='todo-input-div'>
           <input
             className='todo-input'
