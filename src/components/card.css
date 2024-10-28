@@ -5,7 +5,8 @@
     background-color: #FAF9F6;
     padding: 10px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    overflow: scroll;
+    border-radius: 15px;
+    /* overflow: scroll; */
 }
 
 .todo-card-text {
@@ -13,7 +14,6 @@
     justify-content: center;
     align-items: center;
 }
-
 
 .todo-card h3 {
     display: block;
@@ -25,14 +25,12 @@
     text-align: left;
 }
 
-
 .delete-container {
     display: flex;
     justify-content: flex-end;
 }
 
 .todo-delete-btn {
-   
     width: 30px;
     height: 30px;
     border: none;
@@ -43,7 +41,6 @@
     border-radius: 10px;
     
 }
-
 
 .todo-delete-btn:hover {
     background-color: rgba(255, 0, 0, 0.783);
