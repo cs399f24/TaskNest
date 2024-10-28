@@ -21,7 +21,7 @@ def create_app(tasks):
         if 'tasks' not in data:
             return 'Invalid body', 400
 
-        the_task = data['task']
+        the_task = data['tasks']
 
         if not tasks.is_valid_vote(the_task):
             return 'Invalid vote', 400
