@@ -14,10 +14,13 @@
   width: 100%;
   height: 200px;
   background-color: #fffffffa;
-  border-radius: 20px;
   padding-left: 20px;
   padding-top: 20px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-top-left-radius: 70px;
+  border-bottom-right-radius: 70px;
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 
 .todo-input-div {
