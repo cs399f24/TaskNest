@@ -10,10 +10,15 @@ function App() {
   const [newTodo, setNewTodo] = useState("")
 
   const createNewTask = () => {
-    if (newTodo != "") {
+    if (newTodo !== "") {
       setTask([...tasks, newTodo])
       setNewTodo("")
     }
+  }
+
+  const deleteTask = (index) => {
+    setTask((prevTask) => prevTask.filter((_, i) => i !== index));
+
   }
 
   return (
@@ -40,7 +45,7 @@ function App() {
       <div className='todo-grid'>
         {
           tasks.map((task, index) => (
-            <Card number={index + 1} description={task} />
+            <Card index={index} deleteTask={deleteTask} number={index + 1} description={task} />
           ))
         }
       </div>

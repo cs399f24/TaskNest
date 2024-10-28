@@ -10,9 +10,8 @@ export const Card = (props) => {
             animate={{ opacity: 1, scale: 1 }}
         >
             <div className='delete-container'>
-              <button className='todo-delete-btn'>X</button>
+              <button onClick={()=>props.deleteTask(props.index)} className='todo-delete-btn'>X</button>
             </div>
-
             <h3>Task #{props.number}</h3>
 
             <div className="todo-card-text">
