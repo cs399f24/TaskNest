@@ -9,7 +9,8 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
-  const backendUrl = '34.229.143.4:80';
+  const backendUrl = 'http://34.229.143.4:80';
+
 
   // Fetch tasks on component mount
   useEffect(() => {
