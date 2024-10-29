@@ -3,32 +3,38 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Card } from './components/card';
 import './App.css';
+import { desc } from 'framer-motion/client';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
+  // Fetch tasks on component mount
   useEffect(() => {
-    axios.get('http://localhost:5000/tasks')
+    axios.get('http://localhost:5300/tasks')
       .then(response => setTasks(response.data))
       .catch(error => console.error('Error fetching tasks:', error));
   }, []);
 
-  const createNewTask = () => {
+  const createNewTask = async () => {
     if (newTodo !== "") {
-      axios.post('http://localhost:5000/add', { description: newTodo })
-        .then(response => {
-          setTasks(response.data);
-          setNewTodo("");
-        })
-        .catch(error => console.error('Error adding task:', error));
+      try {
+        const response = await axios.post('http://localhost:5300/add', { description: newTodo, time: new Date().toISOString() });
+        setTasks(response.data);
+        setNewTodo("");
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
     }
   };
 
-  const deleteTask = (index) => {
-    axios.delete(`http://localhost:5000/delete/${index}`)
-      .then(response => setTasks(response.data))
-      .catch(error => console.error('Error deleting task:', error));
+  const deleteTask = async (index) => {
+    try {
+      const response = await axios.delete(`http://localhost:5300/delete/${index}`);
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   return (
@@ -53,13 +59,13 @@ function App() {
       </motion.div>
 
       <div className="todo-grid">
-        {tasks.map((task, index) => (
+        {Object.entries(tasks).map(([description, time], index) => (
           <Card
             key={index}
             index={index}
-            deleteTask={() => deleteTask(index)}
+            deleteTask={() => deleteTask(description)} // Delete the task
             number={index + 1}
-            description={task}
+            description={description} // Display the task description
           />
         ))}
       </div>

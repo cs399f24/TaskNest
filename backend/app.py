@@ -2,45 +2,43 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)  # Allows cross-origin requests from your React frontend
 
-# Configure CORS with All settings
+# Task storage: description mapped to time
+tasks = {}
 
-CORS(app, resources={r"/*": {"origins": "*"}})
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
-
-tasks = []
+@app.route('/test', methods=['GET'])
+def test_task():
+    return jsonify({"message": "This is a response from Flask!"})
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    response = jsonify(tasks)
-    return response, 200
+    """Retrieve all tasks."""
+    return jsonify(tasks), 200
 
-@app.route('/add', methods=['POST'])
+@app.route('/add', methods=['POST', 'OPTIONS'])
 def add_task():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'ok'}), 200  # Handle preflight request
+
     data = request.get_json()
     task_description = data.get('description')
+    task_time = data.get('time')
     
-    if task_description:
-        tasks.append(task_description)
-        response = jsonify(tasks)
-        return response, 201
-    else:
-        return jsonify({"error": "Invalid input"}), 400
+    if not task_description or not task_time:
+        return jsonify({"error": "Both description and time are required."}), 400
+    
+    tasks[task_description] = task_time
+    return jsonify(tasks), 201
 
-@app.route('/delete/<int:index>', methods=['DELETE'])
-def delete_task(index):
-    if 0 <= index < len(tasks):
-        tasks.pop(index)
-        response = jsonify(tasks)
-        return response, 200
+@app.route('/delete/<string:description>', methods=['DELETE'])
+def delete_task(description):
+    """Delete a task by description."""
+    if description in tasks:
+        del tasks[description]
+        return jsonify(tasks), 200
     else:
-        return jsonify({"error": "Task not found"}), 404
+        return jsonify({"error": "Task not found."}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5300)  # Exposes Flask server publicly on port 5300
