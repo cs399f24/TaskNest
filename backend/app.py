@@ -1,33 +1,46 @@
 from flask import Flask, jsonify, request
-import json
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
 
-def create_app(tasks):
+# Configure CORS with All settings
 
-    app = Flask(__name__)
-    CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-    @app.route('/tasks', methods=['GET'])
-    def tasks():
-        return jsonify(tasks.get_tasks())
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
-    @app.route('/add', methods=['POST'])
-    def vote():
-        data = json.loads(request.data)
+tasks = []
 
-        if 'tasks' not in data:
-            return 'Invalid body', 400
+@app.route('/tasks', methods=['GET'])
+def get_tasks():
+    response = jsonify(tasks)
+    return response, 200
 
-        the_task = data['tasks']
+@app.route('/add', methods=['POST'])
+def add_task():
+    data = request.get_json()
+    task_description = data.get('description')
+    
+    if task_description:
+        tasks.append(task_description)
+        response = jsonify(tasks)
+        return response, 201
+    else:
+        return jsonify({"error": "Invalid input"}), 400
 
-        if not tasks.is_valid_vote(the_task):
-            return 'Invalid vote', 400
+@app.route('/delete/<int:index>', methods=['DELETE'])
+def delete_task(index):
+    if 0 <= index < len(tasks):
+        tasks.pop(index)
+        response = jsonify(tasks)
+        return response, 200
+    else:
+        return jsonify({"error": "Task not found"}), 404
 
-        tasks.register_task(the_task)
-
-        return jsonify(tasks.get_tasks())
-
-    return app
+if __name__ == '__main__':
+    app.run(debug=True)
