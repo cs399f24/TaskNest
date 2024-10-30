@@ -17,7 +17,6 @@ export const SignUp = () => {
       console.log("Signup successful:", data);
     });
   };
-  
 
   return (
     <div className='sign-up-page'>
