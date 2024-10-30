@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Card } from './components/card';
 import './App.css';
 import { desc } from 'framer-motion/client';
+import SignUp from './pages/signUp/SignUp';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -42,6 +43,9 @@ function App() {
 
   return (
     <div className="App">
+
+      <SignUp/>
+  
       <motion.div
         className="todo-task-container"
         initial={{ opacity: 0, y: -100 }}
