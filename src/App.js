@@ -56,7 +56,7 @@ function App() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 2 }}
       >
-        <h2 className="title">Add Task</h2>
+        <h2 className="title">Task Manager</h2>
         <div className="todo-input-div">
           <input
             className="todo-input"
