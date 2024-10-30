@@ -20,7 +20,7 @@ export const SignUp = () => {
   
 
   return (
-    <div>
+    <div className='sign-up-page'>
       <form onSubmit={onSubmit}>
         <input 
           type="email" 

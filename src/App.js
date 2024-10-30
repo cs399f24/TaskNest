@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Card } from './components/card';
+import { Card } from './components/card/card';
 import './App.css';
 import { desc } from 'framer-motion/client';
 import SignUp from './pages/signUp/SignUp';
+import Navbar from './components/navbar/Navbar';
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
   const backendUrl = 'http://34.229.143.4:80';
+  const localHostUrl = 'http://localhost:5300'
 
 
   // Fetch tasks on component mount
@@ -43,8 +45,10 @@ function App() {
 
   return (
     <div className="App">
-
+      <Navbar/>
       <SignUp/>
+      
+
   
       <motion.div
         className="todo-task-container"
@@ -52,7 +56,7 @@ function App() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 2 }}
       >
-        <h2 className="title">TaskNest</h2>
+        <h2 className="title">Add Task</h2>
         <div className="todo-input-div">
           <input
             className="todo-input"
