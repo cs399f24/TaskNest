@@ -10,14 +10,16 @@
     - Ports enabled: `22`(SSH), and `80`(HTTP)
 - Following are commands to create this instance and are to be executed in order found on this document:
 ```bash
-aws ec2 create-security-group --group-name "task-nest-security-group" \
---description "task-nest-security-group: allows 22, 80" \
---vpc-id "vpc-0df1909ea8ee1046a"
+GROUP_ID=$(aws ec2 create-security-group --group-name "task-nest-security-group" \
+--description "task-nest-security-group: allows 22, 80" --query 'GroupId' --output text)
+
 ```
 ```bash
-aws ec2 authorize-security-group-ingress --group-id "sg-preview-1" \
---ip-permissions '{"IpProtocol":"tcp","FromPort":22,"ToPort":22,"IpRanges":[{"CidrIp":"0.0.0.0/0"}]}' \
-'{"IpProtocol":"tcp","FromPort":80,"ToPort":80,"IpRanges":[{"CidrIp":"0.0.0.0/0"}]}'
+aws ec2 authorize-security-group-ingress --group-id "$GROUP_ID" \
+--ip-permissions '[
+  {"IpProtocol":"tcp","FromPort":22,"ToPort":22,"IpRanges":[{"CidrIp":"0.0.0.0/0"}]},
+  {"IpProtocol":"tcp","FromPort":80,"ToPort":80,"IpRanges":[{"CidrIp":"0.0.0.0/0"}]}
+]'
 ```
 ```bash
 aws ec2 run-instances --image-id "ami-06b21ccaeff8cd686" \
