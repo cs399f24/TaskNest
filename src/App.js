@@ -3,13 +3,11 @@ import Home from './pages/home/home';
 import SignUp from './pages/signUp/SignUp';
 import Navbar from './components/navbar/Navbar';
 
-
 function App() {
 
   return (
     <div className="App">
-              <Navbar />
-
+      <Navbar />
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,4 +19,3 @@ function App() {
 }
 
 export default App;
-
