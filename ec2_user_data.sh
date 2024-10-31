@@ -1,3 +1,4 @@
+#!/bin/bash
 # Flask backend:
 cd backend
 python3 -m venv .venv

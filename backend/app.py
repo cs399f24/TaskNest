@@ -41,4 +41,4 @@ def delete_task(description):
         return jsonify({"error": "Task not found."}), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5300)  # Exposes Flask server publicly on port 5300
+    app.run(host='0.0.0.0', port=80)

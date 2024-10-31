@@ -12,7 +12,6 @@
 ```bash
 GROUP_ID=$(aws ec2 create-security-group --group-name "task-nest-security-group" \
 --description "task-nest-security-group: allows 22, 80" --query 'GroupId' --output text)
-
 ```
 ```bash
 aws ec2 authorize-security-group-ingress --group-id "$GROUP_ID" \
