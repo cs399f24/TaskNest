@@ -25,13 +25,12 @@ aws ec2 authorize-security-group-ingress --group-id "$GROUP_ID" \
 ```
 - Authorizes inbound connections through the security group into port 22, and 80
 - `--group-id` Specify the security group id to modify
-- `--ip-permissions` in json format like the following to specify the ports:
-```json
-[
-  {"IpProtocol":"tcp","FromPort":22,"ToPort":22,"IpRanges":[{"CidrIp":"0.0.0.0/0"}]},
-  {"IpProtocol":"tcp","FromPort":80,"ToPort":80,"IpRanges":[{"CidrIp":"0.0.0.0/0"}]}
-]
-```
+- `--ip-permissions`:
+    - `IpProtocol` Ip Protocol
+    - `FromPort` From port routing specification
+    - `ToPort` To port routing specification
+    - `IpRanges`:
+        - `CidrIp` valid ip ranges.
 - `> /dev/null` at the end reroutes the extra output of the command into a nonexistent directory to get rid of it. (Note: when rerouting to `/dev/null` all output is routed **EXCEPT** the errors.)
 --------------------------------------------------
 ```bash
@@ -73,3 +72,42 @@ INSTANCE_ID=$(aws ec2 run-instances --image-id "ami-06b21ccaeff8cd686" \
 - `--query` A flag querying the output to return a specific piece of data.
 - `--output` A flag to specify the format of the output, the default is `JSON`.
 --------------------------------------------------
+```bash
+while true; do
+    INSTANCE_STATE=$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" --query 'Reservations[0].Instances[0].State.Name' --output text)
+    
+    if [ "$INSTANCE_STATE" == "running" ]; then
+        PUBLIC_IP=$(aws ec2 describe-instances --instance-ids "$INSTANCE_ID" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+        if [ "$PUBLIC_IP" != "None" ]; then
+            echo "Launched EC2 instance, Public IPv4 address: $PUBLIC_IP"
+            break
+        else
+            echo "Waiting for the public IP address..."
+        fi
+    else
+        echo "."
+    fi
+
+    sleep 1
+done
+```
+- loop checking if the instance launched is in the running state, when the instance is not it prints a period to show it is running, waits one second and checks again, once the instance state is running it sets a variable: `PUBLIC_IP` to the instances public IPv4 address.
+- Uses a series of `aws ec2 describe-instances` to get information like about the ec2 instance.
+###### Flags:
+- `--instance-ids` specify the `EC2` instance's id you want to describe.
+- `--query` a flag querying the output of the command to return a certain piece of the output.
+- `--output` a flag for the user to specify what kind of output they want `JSON` is default.
+--------------------------------------------------
+```bash
+echo "REACT_APP_EC2_PUBLIC_IP=$PUBLIC_IP" >> .env
+npm run build > /dev/null
+
+export SECURITY_GROUP_ID=$GROUP_ID
+export EC2_INSTANCE_ID=$INSTANCE_ID
+
+aws s3 cp ./build s3://task-nest-test-bucket-1/ --recursive > /dev/null
+```
+- Series of commands to build and load the front end onto the `S3` bucket.
+- creates a file named `.env` in the following path: `@/.env`
+- `echo "REACT_APP_EC2_PUBLIC_IP=$PUBLIC_IP" >> .env` adds the line: `REACT_APP_EC2_PUBLIC_IP=$PUBLIC_IP` to the file at `@/.env` if the file exists it adds it to it, but in this script before running it should not, meaning that it will create the file and add this like to it. 
+- when the bash variable `PUBLIC_IP` is used in line like this `$PUBLIC_IP` it will get the actual value of the variable which means the final line in the file will look very simar to this but with a different `IPv4` public address: `REACT_APP_EC2_PUBLIC_IP=54.186.195.72`

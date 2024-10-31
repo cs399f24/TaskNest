@@ -2,31 +2,31 @@
 
 A web-based application for keeping track of tasks in a users given day.
 
-### Documentation:
-- Full documentation on the instance settings regarding `S3`, `EC2`, and `AWS Cognito`.
-- Full documentation explaining the `launch_aws.sh` file.
-- all documentation can be found at: `project_root/docs/`
-
 Using React for the front-end presented to the user using `AWS S3`
 The back-end of the application is hosted on a `AWS EC2` instance using `flask` and `AWS DynamoDB` to store data
 `AWS Cognito` to support users for the application. Notifications will use the Unix Timestamp in the database and alert users of deadlines, or times when a task is to be completed.
+
+### Documentation:
+- Full documentation on the instance settings regarding `S3`, `EC2`, and `AWS Cognito`.
+- Full documentation explaining the `launch_aws.sh` file.
+- all documentation can be found at: `@/docs/`
 
 ## Available Scripts
 
 To use the react scripts you must first run the following command to download project dependencies:
 
-### `npm install`
+##### `npm install`
 
 In the project directory, you can run:
 
-### `npm run build`
+##### `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 In the project directory, you can run:
 
-### `npm start`
+##### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
@@ -34,7 +34,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
+##### `npm test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
