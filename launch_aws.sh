@@ -39,7 +39,7 @@ while true; do
         echo "."
     fi
 
-    sleep 5
+    sleep 1
 done
 
 echo Building front-end...

@@ -9,9 +9,17 @@ export const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
-  const backendUrl = 'http://34.229.143.4:80';
-  const localHostUrl = 'http://localhost:5300'
+  let backendUrl = 'http://localhost:5300';
 
+  try {
+    const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
+    if (EC2_IP) {
+      backendUrl = `http://${EC2_IP}:80`;
+      console.log('Backend URL:', backendUrl); // for dev purposes
+    }
+  } catch (error) {
+    console.error('Error setting backend URL:', error);
+  }
 
   // Fetch tasks on component mount
   useEffect(() => {
@@ -43,8 +51,6 @@ export const Home = () => {
 
   return (
     <div className="Home">
-      
-
   
       <motion.div
         className="todo-task-container"
