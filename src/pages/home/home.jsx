@@ -15,7 +15,7 @@ export const Home = () => {
 
   // Fetch tasks on component mount
   useEffect(() => {
-    axios.get(`${localHostUrl}/tasks`)
+    axios.get(`${backendUrl}/tasks`)
       .then(response => setTasks(response.data))
       .catch(error => console.error('Error fetching tasks:', error));
   }, []);
@@ -23,7 +23,7 @@ export const Home = () => {
   const createNewTask = async () => {
     if (newTodo !== "") {
       try {
-        const response = await axios.post(`${localHostUrl}/add`, { description: newTodo, time: new Date().toISOString() });
+        const response = await axios.post(`${backendUrl}/add`, { description: newTodo, time: new Date().toISOString() });
         setTasks(response.data);
         setNewTodo("");
       } catch (error) {
@@ -34,7 +34,7 @@ export const Home = () => {
 
   const deleteTask = async (index) => {
     try {
-      const response = await axios.delete(`${localHostUrl}/delete/${index}`);
+      const response = await axios.delete(`${backendUrl}/delete/${index}`);
       setTasks(response.data);
     } catch (error) {
       console.error('Error deleting task:', error);
