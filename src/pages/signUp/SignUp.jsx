@@ -8,15 +8,18 @@ export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const onSubmit = (event) => {
     event.preventDefault();
     UserPool.signUp(email, password, [], null, (err, data) => {
       if (err) {
         setErrorMessage(err.message);
+        setSuccessMessage(""); // Clear success message on error
         return;
       }
       setErrorMessage(""); // Clear error message on success
+      setSuccessMessage("Sign Up successful!"); // Set success message
       console.log("Signup successful:", data);
     });
   };
@@ -44,7 +47,8 @@ export const SignUp = () => {
           placeholder="Password"
           required
         />
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>}
 
         <Button submit="submit" text='Sign Up' />
       </motion.form>
