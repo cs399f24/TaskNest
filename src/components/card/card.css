@@ -17,6 +17,7 @@
 
 .todo-card h3 {
     display: block;
+    margin-bottom: 20px;
 }
 
 .todo-card p {
