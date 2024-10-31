@@ -33,7 +33,9 @@ function Navbar() {
             <header className={styles.navbarHeader}>
                 <nav className={styles.navbar}>
                     <div className={styles.logo}>
+                        <a href="/">
                         <h3>tasknest</h3>
+                        </a>
                     </div>
 
                     <ul className={`${styles.navMenu} ${isActive ? styles.active : 'navMenuDefault'}`}>
@@ -42,7 +44,7 @@ function Navbar() {
                         </li>
                         <li>
                         <a 
-                                href="#" // Change href to "#" to prevent default link behavior
+                                href="/sign-up" // Change href to "#" to prevent default link behavior
                                 id='sign-up' 
                                 className={styles.navLink}
                                 // Use handleSignUpClick

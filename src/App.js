@@ -1,85 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
-import { Card } from './components/card/card';
-import './App.css';
-import { desc } from 'framer-motion/client';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Home from './pages/home/home';
 import SignUp from './pages/signUp/SignUp';
 import Navbar from './components/navbar/Navbar';
 
+
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [newTodo, setNewTodo] = useState("");
-
-  const backendUrl = 'http://34.229.143.4:80';
-  const localHostUrl = 'http://localhost:5300'
-
-
-  // Fetch tasks on component mount
-  useEffect(() => {
-    axios.get(`${backendUrl}/tasks`)
-      .then(response => setTasks(response.data))
-      .catch(error => console.error('Error fetching tasks:', error));
-  }, []);
-
-  const createNewTask = async () => {
-    if (newTodo !== "") {
-      try {
-        const response = await axios.post(`${backendUrl}/add`, { description: newTodo, time: new Date().toISOString() });
-        setTasks(response.data);
-        setNewTodo("");
-      } catch (error) {
-        console.error('Error adding task:', error);
-      }
-    }
-  };
-
-  const deleteTask = async (index) => {
-    try {
-      const response = await axios.delete(`${backendUrl}/delete/${index}`);
-      setTasks(response.data);
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
 
   return (
     <div className="App">
-      <Navbar/>
-      <SignUp/>
-      
+              <Navbar />
 
-  
-      <motion.div
-        className="todo-task-container"
-        initial={{ opacity: 0, y: -100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2 }}
-      >
-        <h2 className="title">Task Manager</h2>
-        <div className="todo-input-div">
-          <input
-            className="todo-input"
-            type="text"
-            onChange={(e) => setNewTodo(e.target.value)}
-            value={newTodo}
-            placeholder="Add Tasks Here"
-          />
-          <button className="todo-add-btn" onClick={createNewTask}>Add</button>
-        </div>
-      </motion.div>
-
-      <div className="todo-grid">
-        {Object.entries(tasks).map(([description, time], index) => (
-          <Card
-            key={index}
-            index={index}
-            deleteTask={() => deleteTask(description)} // Delete the task
-            number={index + 1}
-            description={description} // Display the task description
-          />
-        ))}
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-up" element={<SignUp />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import UserPool from './Userpool'; 
+import './SignUp.css'
+import Button from '../../components/button/button';
+import {motion} from 'framer-motion'
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +23,14 @@ export const SignUp = () => {
 
   return (
     <div className='sign-up-page'>
-      <form onSubmit={onSubmit}>
+      <motion.form  
+      onSubmit={onSubmit}
+      initial={{ opacity: 0, y:50 }}
+      animate={{ opacity: 1, y:0 }}
+      transition={{ duration: 0.9 }}
+
+      >
+        <h1>Create An Account!</h1>
         <input 
           type="email" 
           value={email} 
@@ -35,8 +45,8 @@ export const SignUp = () => {
           placeholder="Password"
           required
         />
-        <button type='submit'>Sign Up</button>
-      </form>
+        <Button submit="submit" text='Sign Up' />
+      </motion.form>
     </div>
   );
 }
