@@ -110,4 +110,11 @@ aws s3 cp ./build s3://task-nest-test-bucket-1/ --recursive > /dev/null
 - Series of commands to build and load the front end onto the `S3` bucket.
 - creates a file named `.env` in the following path: `@/.env`
 - `echo "REACT_APP_EC2_PUBLIC_IP=$PUBLIC_IP" >> .env` adds the line: `REACT_APP_EC2_PUBLIC_IP=$PUBLIC_IP` to the file at `@/.env` if the file exists it adds it to it, but in this script before running it should not, meaning that it will create the file and add this like to it. 
-- when the bash variable `PUBLIC_IP` is used in line like this `$PUBLIC_IP` it will get the actual value of the variable which means the final line in the file will look very simar to this but with a different `IPv4` public address: `REACT_APP_EC2_PUBLIC_IP=54.186.195.72`
+- when the bash variable `PUBLIC_IP` is used in line like this `$PUBLIC_IP` it will get the actual value of the variable which means the final line in the file will look very simar to this but with a different `IPv4` public address: `REACT_APP_EC2_PUBLIC_IP=54.186.195.72`.
+- `npm run build > /dev/null` runs the `build` script from `react-scripts`
+- `> /dev/null` at the end reroutes the extra output of the command into a nonexistent directory to get rid of it. (Note: when rerouting to `/dev/null` all output is routed **EXCEPT** the errors.)
+- `export SECURITY_GROUP_ID=$GROUP_ID` and `export EC2_INSTANCE_ID=$INSTANCE_ID` load the bash variables as environment variables for use in the `destroy_aws.sh` script.
+- `aws s3 cp ./build s3://task-nest-test-bucket-1/ --recursive > /dev/null` copies the built react app and uploads it to the `S3` bucket named `task-nest-bucket-1`.
+- Pseudo command: `aws s3 cp <Path-To-Files-To-Upload>, s3://<S3-Bucket-Name>/ --recursive > /dev/null` 
+###### Flags:
+- `--recursive` says to iterate through the directory provided and upload the files one by one.
