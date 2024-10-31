@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './Navbar.module.css';
 import logo from '../../assets/logo.png'
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 
@@ -26,7 +26,7 @@ function Navbar() {
 
          */}
 
-  
+
 
     return (
         <div className={styles.main}>
@@ -34,20 +34,20 @@ function Navbar() {
                 <nav className={styles.navbar}>
                     <div className={styles.logo}>
                         <a href="/">
-                        <h3>tasknest</h3>
+                            <h3>tasknest</h3>
                         </a>
                     </div>
 
                     <ul className={`${styles.navMenu} ${isActive ? styles.active : 'navMenuDefault'}`}>
                         <li>
-                            <a href='/' className={styles.navLink}>Login</a>
+                            <a href='/log-in' className={styles.navLink}>Login</a>
                         </li>
                         <li>
-                        <a 
+                            <a
                                 href="/sign-up" // Change href to "#" to prevent default link behavior
-                                id='sign-up' 
+                                id='sign-up'
                                 className={styles.navLink}
-                                // Use handleSignUpClick
+                            // Use handleSignUpClick
                             >
                                 Sign Up
                             </a>

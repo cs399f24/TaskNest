@@ -1,4 +1,4 @@
-.sign-up-page {
+.log-in-page {
     padding-top: 100px;
     background: radial-gradient(circle at 10% 20%, rgb(233, 122, 129) 0%, rgb(181, 64, 149) 100.2%);
     font-family: "Quicksand", sans-serif;
@@ -7,7 +7,7 @@
 }
 
 
-.sign-up-page form {
+.log-in-page form {
     width: 600px;
     height: 600px;
     margin: 0 auto;
@@ -23,7 +23,7 @@
 
 }
 
-.sign-up-page form h1 {
+.log-in-page form h1 {
     margin-top: 100px;
     text-align: center;
     margin-bottom: 50px;
@@ -32,7 +32,7 @@
 
 }
 
-.sign-up-page form input {
+.log-in-page form input {
     width: 80%;
     height: 60px;
     margin: 10px auto;
@@ -44,14 +44,11 @@
 
 }
 
-
-.sign-up-page p {
+.log-in-page p {
     text-align: center;
     color: rgb(255, 255, 255);
     font-weight: bolder;
     font-style: italic;
 }
-
-
 
 
