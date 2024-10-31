@@ -2,6 +2,11 @@
 
 A web-based application for keeping track of tasks in a users given day.
 
+### Documentation:
+- Full documentation on the instance settings regarding `S3`, `EC2`, and `AWS Cognito`.
+- Full documentation explaining the `launch_aws.sh` file.
+- all documentation can be found at: `project_root/docs/`
+
 Using React for the front-end presented to the user using `AWS S3`
 The back-end of the application is hosted on a `AWS EC2` instance using `flask` and `AWS DynamoDB` to store data
 `AWS Cognito` to support users for the application. Notifications will use the Unix Timestamp in the database and alert users of deadlines, or times when a task is to be completed.

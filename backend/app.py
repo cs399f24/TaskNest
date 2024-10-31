@@ -19,7 +19,7 @@ def get_tasks():
 @app.route('/add', methods=['POST', 'OPTIONS'])
 def add_task():
     if request.method == 'OPTIONS':
-        return jsonify({'status': 'ok'}), 200  # Handle preflight request
+        return jsonify({'status': 'ok'}), 200
 
     data = request.get_json()
     task_description = data.get('description')
