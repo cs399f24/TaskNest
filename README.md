@@ -7,9 +7,10 @@ The back-end of the application is hosted on a `AWS EC2` instance using `flask` 
 `AWS Cognito` to support users for the application. Notifications will use the Unix Timestamp in the database and alert users of deadlines, or times when a task is to be completed.
 
 ### Documentation:
-- Full documentation on the instance settings regarding `S3`, `EC2`, and `AWS Cognito`.
-- Full documentation explaining the `launch_aws.sh` file.
-- all documentation can be found at: `@/docs/`
+  - [`S3`](docs/s3.md)
+  - [`EC2`](docs/ec2.md)
+  - [`Cognito`](docs/cognito.md)
+  - [`AWS EC2 & S3 Launch Script Guide`](docs/launch_aws.md) - Full documentation explaining the `launch_aws.sh` file.
 
 ## Available Scripts
 
