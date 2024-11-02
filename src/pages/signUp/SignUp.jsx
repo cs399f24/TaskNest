@@ -3,12 +3,14 @@ import UserPool from './Userpool';
 import './SignUp.css'
 import Button from '../../components/button/button';
 import {motion} from 'framer-motion'
+import { useNavigate } from 'react-router-dom';
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -21,6 +23,8 @@ export const SignUp = () => {
       setErrorMessage(""); // Clear error message on success
       setSuccessMessage("Sign Up successful!"); // Set success message
       console.log("Signup successful:", data);
+      navigate('/log-in'); // Navigate to confirmation page
+
     });
   };
 

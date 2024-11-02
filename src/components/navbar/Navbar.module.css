@@ -107,6 +107,14 @@ li:nth-of-type(2) {
 
 }
 
+button {
+  background-color: rgb(214, 2, 203);
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+}
+
 .navLink:hover {
   color: rgba(241, 241, 241, 0.593);
   cursor: pointer;

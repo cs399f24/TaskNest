@@ -4,6 +4,7 @@ import Button from '../../components/button/button';
 import { motion } from 'framer-motion';
 import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
 import Userpool from '../signUp/Userpool';
+import { useNavigate } from 'react-router-dom';
 
 export const LogIn = () => {
     const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ export const LogIn = () => {
     const [showConfirmationInput, setShowConfirmationInput] = useState(false); // Track if confirmation input should show
     const [errorMessages, setErrorMessages] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const navigate = useNavigate();
 
     const onSubmit = (event) => {
         event.preventDefault();
@@ -33,6 +35,9 @@ export const LogIn = () => {
                 setSuccessMessage("Login successful!");
                 const userId = data.idToken.payload.sub;
                 localStorage.setItem("user_id", userId); // Store in localStorage for later retrieval
+                console.log("User ID:", userId);
+                navigate('/'); // Navigate to home page
+                
         
             },
             onFailure: err => {
@@ -85,6 +90,7 @@ export const LogIn = () => {
         setSuccessMessage("You have been logged out.");
         setEmail("");
         setPassword("");
+        console.log("Removed user_id from localStorage");
     };
     
 

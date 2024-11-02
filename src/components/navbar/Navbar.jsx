@@ -1,30 +1,39 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import styles from './Navbar.module.css';
 import logo from '../../assets/logo.png'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 
+
 function Navbar() {
 
 
     const [isActive, setIsActive] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+
 
 
     const toggleActiveClass = () => {
         setIsActive(!isActive);
     };
-    {/**
 
-         const handleSignUpClick = () => {
-        navigate('/sign-up'); // Navigate to the Sign Up route
-        setIsActive(false); // Optionally close the menu after clicking
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsLoggedIn(!!localStorage.getItem("user_id"));
+        }, 1000);
+
+        return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user_id"); // Clear user_id from localStorage
+        setIsLoggedIn(false); // Update isLoggedIn state
+        navigate('/log-in'); // Redirect to the home page
     };
 
-        const navigate = useNavigate(); // Initialize useNavigate
 
-
-         */}
 
 
 
@@ -39,19 +48,22 @@ function Navbar() {
                     </div>
 
                     <ul className={`${styles.navMenu} ${isActive ? styles.active : 'navMenuDefault'}`}>
-                        <li>
-                            <a href='/log-in' className={styles.navLink}>Login</a>
-                        </li>
-                        <li>
-                            <a
-                                href="/sign-up" // Change href to "#" to prevent default link behavior
-                                id='sign-up'
-                                className={styles.navLink}
-                            // Use handleSignUpClick
-                            >
-                                Sign Up
-                            </a>
-                        </li>
+                    {isLoggedIn ? (
+                            // Show Logout if user is logged in
+                            <li>
+                                <button  onClick={handleLogout} className={styles.navLink}>Logout</button>
+                            </li>
+                        ) : (
+                            // Show Login and Sign Up if user is not logged in
+                            <>
+                                <li>
+                                    <a href='/log-in' className={styles.navLink}>Login</a>
+                                </li>
+                                <li>
+                                    <a href="/sign-up" className={styles.navLink}>Sign Up</a>
+                                </li>
+                            </>
+                        )}
 
                     </ul>
 
