@@ -53,14 +53,24 @@ export const Home = () => {
     }
 };
 
-  const deleteTask = async (index) => {
-    try {
-      const response = await axios.delete(`${backendUrl}/delete/${index}`);
+const deleteTask = async (description) => {
+  const userId = localStorage.getItem("user_id"); // Get user_id from localStorage
+
+  if (!userId) {
+      console.error('User ID is not available.');
+      return; // Exit if user_id is not available
+  }
+
+  try {
+      // Pass user_id as a query parameter in the delete request
+      const response = await axios.delete(`${backendUrl}/delete/${description}`, {
+          params: { user_id: userId } // Include user_id in the request
+      });
       setTasks(response.data);
-    } catch (error) {
+  } catch (error) {
       console.error('Error deleting task:', error);
-    }
-  };
+  }
+};
 
   return (
     <div className="Home">
