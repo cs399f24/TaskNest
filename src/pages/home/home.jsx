@@ -9,7 +9,7 @@ export const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
-  let backendUrl = 'http://localhost:5300';
+  let backendUrl = 'http://127.0.0.1:80';
 
   try {
     const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
@@ -23,22 +23,35 @@ export const Home = () => {
 
   // Fetch tasks on component mount
   useEffect(() => {
-    axios.get(`${backendUrl}/tasks`)
-      .then(response => setTasks(response.data))
-      .catch(error => console.error('Error fetching tasks:', error));
+    const userId = localStorage.getItem("user_id");
+    
+    if (userId) {
+        axios.get(`${backendUrl}/tasks`, {
+            params: { user_id: userId } // Pass user_id as a query parameter
+        })
+        .then(response => setTasks(response.data))
+        .catch(error => console.error('Error fetching tasks:', error));
+    }
+
   }, []);
 
   const createNewTask = async () => {
-    if (newTodo !== "") {
-      try {
-        const response = await axios.post(`${backendUrl}/add`, { description: newTodo, time: new Date().toISOString() });
-        setTasks(response.data);
-        setNewTodo("");
-      } catch (error) {
-        console.error('Error adding task:', error);
-      }
+    const userId = localStorage.getItem("user_id");
+
+    if (newTodo !== "" && userId) {
+        try {
+            const response = await axios.post(`${backendUrl}/add`, { 
+                description: newTodo, 
+                time: new Date().toISOString(),
+                user_id: userId
+            });
+            setTasks(response.data);
+            setNewTodo("");
+        } catch (error) {
+            console.error('Error adding task:', error);
+        }
     }
-  };
+};
 
   const deleteTask = async (index) => {
     try {

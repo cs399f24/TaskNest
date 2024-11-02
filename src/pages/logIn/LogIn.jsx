@@ -31,6 +31,9 @@ export const LogIn = () => {
                 console.log("onSuccess:", data);
                 setErrorMessages("");
                 setSuccessMessage("Login successful!");
+                const userId = data.idToken.payload.sub;
+                localStorage.setItem("user_id", userId); // Store in localStorage for later retrieval
+        
             },
             onFailure: err => {
                 console.error("onFailure:", err);
@@ -77,50 +80,65 @@ export const LogIn = () => {
         });
     };
 
+    const logout = () => {
+        localStorage.removeItem("user_id"); // Clear stored user_id
+        setSuccessMessage("You have been logged out.");
+        setEmail("");
+        setPassword("");
+    };
+    
+
     return (
-        <div className='log-in-page'>
-            <motion.form  
-                onSubmit={showConfirmationInput ? confirmAccount : onSubmit} // Conditional submit
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9 }}
-            >
-                <h1>{showConfirmationInput ? "Confirm Your Account" : "Log In To Your Account!"}</h1>
-                
+<div className='log-in-page'>
+    {localStorage.getItem("user_id") ? (
+        <div>
+            <p>Welcome back!</p>
+            <button className='log-out-btn' onClick={logout}>Log Out</button>
+        </div>
+    ) : (
+        <motion.form  
+            onSubmit={showConfirmationInput ? confirmAccount : onSubmit} // Conditional submit
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9 }}
+        >
+            <h1>{showConfirmationInput ? "Confirm Your Account" : "Log In To Your Account!"}</h1>
+            
+            <input 
+                type="email" 
+                value={email} 
+                onChange={(event) => setEmail(event.target.value)} 
+                placeholder="Email"
+                required
+            />
+            
+            {!showConfirmationInput && (
                 <input 
-                    type="email" 
-                    value={email} 
-                    onChange={(event) => setEmail(event.target.value)} 
-                    placeholder="Email"
+                    type="password" 
+                    value={password} 
+                    onChange={(event) => setPassword(event.target.value)} 
+                    placeholder="Password"
                     required
                 />
-                
-                {!showConfirmationInput && (
-                    <input 
-                        type="password" 
-                        value={password} 
-                        onChange={(event) => setPassword(event.target.value)} 
-                        placeholder="Password"
-                        required
-                    />
-                )}
+            )}
 
-                {showConfirmationInput && (
-                    <input 
-                        type="text" 
-                        value={confirmationCode} 
-                        onChange={(event) => setConfirmationCode(event.target.value)} 
-                        placeholder="Enter confirmation code"
-                        required
-                    />
-                )}
+            {showConfirmationInput && (
+                <input 
+                    type="text" 
+                    value={confirmationCode} 
+                    onChange={(event) => setConfirmationCode(event.target.value)} 
+                    placeholder="Enter confirmation code"
+                    required
+                />
+            )}
 
-                {errorMessages && <p className="error-message">{errorMessages}</p>}
-                {successMessage && <p className="success-message">{successMessage}</p>}
+            {errorMessages && <p className="error-message">{errorMessages}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
 
-                <Button submit="submit" text={showConfirmationInput ? 'Confirm' : 'Log In'} />
-            </motion.form>
-        </div>
+            <Button submit="submit" text={showConfirmationInput ? 'Confirm' : 'Log In'} />
+        </motion.form>
+    )}
+</div>
     );
 }
 
