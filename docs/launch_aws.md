@@ -1,6 +1,6 @@
-# Launch_aws.sh
+# launch_aws.sh
 To use The launch script you will meed to have `AWS CLI` installed as well as `NodeJS`
-#### General steps took in the `Launch.sh` script:
+#### General steps took in the `launch_aws.sh` script:
 ```bash
 GROUP_ID=$(aws ec2 create-security-group --group-name "task-nest-security-group" \
 --description "task-nest-security-group: allows 22, 80" --query 'GroupId' --output text) > /dev/null
