@@ -27,12 +27,11 @@ export const Home = () => {
     
     if (userId) {
         axios.get(`${backendUrl}/tasks`, {
-            params: { user_id: userId } // Pass user_id as a query parameter
+            params: { user_id: userId }
         })
         .then(response => setTasks(response.data))
         .catch(error => console.error('Error fetching tasks:', error));
     }
-
   }, []);
 
   const createNewTask = async () => {
@@ -95,13 +94,14 @@ const deleteTask = async (description) => {
       </motion.div>
 
       <div className="todo-grid">
-        {Object.entries(tasks).map(([description, time], index) => (
+        {tasks.map((task, index) => (
           <Card
             key={index}
             index={index}
-            deleteTask={() => deleteTask(description)} // Delete the task
+            deleteTask={() => deleteTask(task.description)}
             number={index + 1}
-            description={description} // Display the task description
+            description={task.description}
+            time={task.time}
           />
         ))}
       </div>
