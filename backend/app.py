@@ -20,7 +20,7 @@ class DynamoDB:
     def add_task(self, user_id, task):
         """Add a task for a specific user to DynamoDB."""
         response = self.table.update_item(
-            Key={'user_id': user_id},
+            Key={'user-id': user_id},
             UpdateExpression="SET tasks = list_append(if_not_exists(tasks, :empty_list), :new_task)",
             ExpressionAttributeValues={':new_task': [task], ':empty_list': []},
             ReturnValues="UPDATED_NEW"
@@ -35,7 +35,7 @@ class DynamoDB:
             return {"error": "Task not found."}
 
         response = self.table.update_item(
-            Key={'user_id': user_id},
+            Key={'user-id': user_id},
             UpdateExpression="SET tasks = :tasks",
             ExpressionAttributeValues={':tasks': updated_tasks},
             ReturnValues="UPDATED_NEW"
@@ -62,7 +62,7 @@ def get_tasks():
     if not user_id:
         return jsonify({"error": "User ID is required"}), 400
 
-    user_tasks = db_connection.get_tasks('DEV_USER')
+    user_tasks = db_connection.get_tasks(user_id)
     return jsonify(user_tasks), 200
 
 @app.route('/add', methods=['POST', 'OPTIONS'])
@@ -78,11 +78,11 @@ def add_task():
     if not all([task_description, task_time, user_id]):
         return jsonify({"error": "Description, time, and user_id are required."}), 400
 
-    if user_id not in tasks:
-        tasks[user_id] = {}
-    tasks[user_id][task_description] = {"time": task_time}
-    
-    return jsonify(tasks[user_id]), 201
+    db_connection.add_task(user_id, {"description": task_description, "time": task_time})
+    updated_tasks = db_connection.get_tasks(user_id)
+
+    return jsonify(updated_tasks), 201
+
 
 @app.route('/delete/<string:description>', methods=['DELETE'])
 def delete_task(description):

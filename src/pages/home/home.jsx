@@ -21,7 +21,6 @@ export const Home = () => {
     console.error('Error setting backend URL:', error);
   }
 
-  // Fetch tasks on component mount
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
     
