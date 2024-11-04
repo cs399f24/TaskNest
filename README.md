@@ -10,6 +10,7 @@ The back-end of the application is hosted on a `AWS EC2` instance using `flask` 
   - [`S3`](docs/s3.md)
   - [`EC2`](docs/ec2.md)
   - [`Cognito`](docs/cognito.md)
+  - [`DynamoDB`](docs/dynamodb.md)
   - [`AWS EC2 & S3 Launch Script Guide`](docs/launch_aws.md) - Full documentation explaining the `launch_aws.sh` file.
 
 ## Available Scripts
