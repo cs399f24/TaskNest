@@ -30,6 +30,8 @@ export const Home = () => {
         })
         .then(response => setTasks(response.data))
         .catch(error => console.error('Error fetching tasks:', error));
+    } else {
+      window.location.href = '/log-in';
     }
   }, []);
 
