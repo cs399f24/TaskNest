@@ -15,6 +15,7 @@ echo Authorized.
 echo Creating an EC2 instance...
 INSTANCE_ID=$(aws ec2 run-instances --image-id "ami-06b21ccaeff8cd686" \
 --instance-type "t2.micro" --key-name "vockey" \
+--iam-instance-profile Name="LabInstanceProfile" \
 --network-interfaces '{"AssociatePublicIpAddress":true,"DeviceIndex":0,"Groups":["'"$GROUP_ID"'"]}' \
 --credit-specification '{"CpuCredits":"standard"}' \
 --tag-specifications '{"ResourceType":"instance","Tags":[{"Key":"Name","Value":"task-nest-ec2"}]}' \
