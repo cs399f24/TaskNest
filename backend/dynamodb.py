@@ -7,15 +7,18 @@ class DynamoDB:
 
     def get_tasks(self, user_id):
         """Retrieve tasks for a specific user from DynamoDB."""
-        response = self.table.get_item(Key={'user_id': user_id})
+        response = self.table.get_item(Key={'user-id': user_id})
         if 'Item' not in response:
             return []
-        return response['Item'].get('tasks', [])
+        
+        tasks = response['Item'].get('tasks', [])
+        print(tasks)
+        return tasks
 
     def add_task(self, user_id, task):
         """Add a task for a specific user to DynamoDB."""
         response = self.table.update_item(
-            Key={'user_id': user_id},
+            Key={'user-id': user_id},
             UpdateExpression="SET tasks = list_append(if_not_exists(tasks, :empty_list), :new_task)",
             ExpressionAttributeValues={':new_task': [task], ':empty_list': []},
             ReturnValues="UPDATED_NEW"
@@ -30,7 +33,7 @@ class DynamoDB:
             return {"error": "Task not found."}
 
         response = self.table.update_item(
-            Key={'user_id': user_id},
+            Key={'user-id': user_id},
             UpdateExpression="SET tasks = :tasks",
             ExpressionAttributeValues={':tasks': updated_tasks},
             ReturnValues="UPDATED_NEW"

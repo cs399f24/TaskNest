@@ -52,17 +52,16 @@ export const Home = () => {
 };
 
 const deleteTask = async (description) => {
-  const userId = localStorage.getItem("user_id"); // Get user_id from localStorage
+  const userId = localStorage.getItem("user_id");
 
   if (!userId) {
       console.error('User ID is not available.');
-      return; // Exit if user_id is not available
+      return;
   }
 
   try {
-      // Pass user_id as a query parameter in the delete request
-      const response = await axios.delete(`${backendUrl}/delete/${description}`, {
-          params: { user_id: userId } // Include user_id in the request
+      const response = await axios.delete(`${backendUrl}/delete`, {
+          params: { user_id: userId, description: description }
       });
       setTasks(response.data);
   } catch (error) {
@@ -72,7 +71,6 @@ const deleteTask = async (description) => {
 
   return (
     <div className="Home">
-  
       <motion.div
         className="todo-task-container"
         initial={{ opacity: 0, y: -100 }}
