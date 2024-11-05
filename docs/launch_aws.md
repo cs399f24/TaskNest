@@ -36,6 +36,7 @@ aws ec2 authorize-security-group-ingress --group-id "$GROUP_ID" \
 ```bash
 INSTANCE_ID=$(aws ec2 run-instances --image-id "ami-06b21ccaeff8cd686" \
 --instance-type "t2.micro" --key-name "vockey" \
+--iam-instance-profile Name="LabInstanceProfile" \
 --network-interfaces '{"AssociatePublicIpAddress":true,"DeviceIndex":0,"Groups":["'"$GROUP_ID"'"]}' \
 --credit-specification '{"CpuCredits":"standard"}' \
 --tag-specifications '{"ResourceType":"instance","Tags":[{"Key":"Name","Value":"task-nest-ec2"}]}' \
@@ -50,6 +51,7 @@ INSTANCE_ID=$(aws ec2 run-instances --image-id "ami-06b21ccaeff8cd686" \
 ###### Flags:
 - `--image-id` Specifies the ID of the AMI to use for the instance.
 - `--instance-type` Specifies the instance type.
+- `--iam-instance-profile` Specifies the IAM role the EC2 will have.
 - `--key-name` Specifies the name of the ssh key pair.
 - `--network-interfaces`:
     - `AssociatePublicIpAddress` Indicates whether to associate a public IP address.
