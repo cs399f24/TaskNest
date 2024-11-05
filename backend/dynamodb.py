@@ -1,5 +1,7 @@
 import boto3
 
+# This class is responsible for interacting with DynamoDB.
+# Line 8, `task-nest-users` is the name of the DynamoDB table.
 class DynamoDB:
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')

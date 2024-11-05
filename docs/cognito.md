@@ -40,9 +40,6 @@
 8. **Create App Client**
    - Click "Add an app client"
    - Name your client (e.g., "website")
- 
-
-
 
 ## For The React Integration
 
@@ -56,8 +53,8 @@ npm install amazon-cognito-identity-js
 import { CognitoUserPool } from "amazon-cognito-identity-js";
 
 const poolData = {
-    UserPoolId: "your-user-pool-id", // From Cognito General Settings
-    ClientId: "your-client-id"       // From App Client Settings
+    UserPoolId: "<your-user-pool-id>", // From Cognito General Settings
+    ClientId: "<your-client-id>"       // From App Client Settings
 };
 
 export default new CognitoUserPool(poolData);
