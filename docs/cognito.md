@@ -3,43 +3,35 @@
 
 1. **Access AWS Console**
    - Navigate to AWS Console
-   - Go to Cognito service
-   - Click "Manage User Pools"
+   - Click on User pools
 
 2. **Create User Pool**
    - Click "Create User Pool" button
-   - Name your pool 
-
+     
 3. **Configure Sign-in Options**
-   - **Important**: These settings cannot be changed after creation
-   - Choose sign-in options:
-     - Email address (selected in tutorial)
-     - Username
-     - Phone number
+   - Choose email only
 
-4. **Attributes**
-   - Choose required standard attributes
+4. **Password Policy**
+   - Cognito defaults
+   - No MFA
+   - Uncheck user account recovery
 
-5. **Password Policy**
-   - Set password requirements:
-     - Minimum length
-     - Require numbers
-     - Require special characters
-     - Require uppercase letters
-     - Require lowercase letters
-
-6. **User Registration**
-   - Enable "Allow users to sign themselves up"
-   - Skip advanced settings
+5. **Configure sign-up experience**
+   - Leave everything there default
 
 
-7. **Message Customization**
-   - Choose between verification code or link
-   - Customize email subjects and messages
+6. **Configure message delivery**
+   - Send email with Cognito
 
-8. **Create App Client**
-   - Click "Add an app client"
-   - Name your client (e.g., "website")
+7. **Integrate Your App**
+    - Name your pool "task-user-pool"
+    - Name your client "task-app-client"
+   
+8. **Review and create**
+    - You should be good now and can press create user pool
+   
+   
+
 
 ## For The React Integration
 
