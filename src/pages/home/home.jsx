@@ -9,17 +9,21 @@ export const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
-  let backendUrl = 'http://127.0.0.1:80';
+  const region = "us-east-1";
+  const API_ID = "kccmzcxywj";
+  const stage_name = "prod";
+
+  let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
 
   try {
     const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
     if (EC2_IP) {
       backendUrl = `http://${EC2_IP}:80`;
-      console.log('Backend URL:', backendUrl); // for dev purposes
     }
   } catch (error) {
     console.error('Error setting backend URL:', error);
   }
+  console.log('URL:', backendUrl);
 
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
