@@ -10,7 +10,7 @@ export const Home = () => {
   const [newTodo, setNewTodo] = useState("");
 
   const region = "us-east-1";
-  const API_ID = "kccmzcxywj";
+  const API_ID = "nra2caqdd1";
   const stage_name = "prod";
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
@@ -26,13 +26,29 @@ export const Home = () => {
   console.log('URL:', backendUrl);
 
   useEffect(() => {
-    const userId = localStorage.getItem("user_id");
-    
+    const userId = "b4089458-50e1-70bf-4e54-812dfa914f48";
+  
     if (userId) {
-        axios.get(`${backendUrl}/tasks`, {
-            params: { user_id: userId }
+      axios
+        .get(`${backendUrl}/tasks`, {
+          params: { user_id: userId },
+          headers: { 'Content-Type': 'application/json' },
         })
-        .then(response => setTasks(response.data))
+        .then(response => {
+          console.log('Response:', response);
+  
+          let tasks = response.data.body;
+          console.log('Tasks:', tasks);
+          if (typeof tasks === 'string') {
+            try {
+              tasks = JSON.parse(tasks);
+            } catch (e) {
+              console.error('Error parsing tasks:', e);
+              tasks = [];
+            }
+          }
+          setTasks(tasks);
+        })
         .catch(error => console.error('Error fetching tasks:', error));
     } else {
       window.location.href = '/log-in';
