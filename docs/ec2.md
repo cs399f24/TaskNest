@@ -4,6 +4,7 @@
 - Instance Type: `t2.micro`
 - Key Name: `vockey` (The `.pem` file can be downloaded from aws details in the learner lab)
 - Uses the default `VPC`, subject to change.
+- Create an IAM Role to give the EC2 Full DynamoDB access.
 - Create a new Security group is chosen
 - #### Security Group
     - Name: `task-nest-security-group`
