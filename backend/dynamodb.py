@@ -5,7 +5,7 @@ import boto3
 class DynamoDB:
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-        self.table = self.dynamodb.Table('task-nest-dynamodb')
+        self.table = self.dynamodb.Table('task-nest-users')
 
     def get_tasks(self, user_id):
         """Retrieve tasks for a specific user from DynamoDB."""
