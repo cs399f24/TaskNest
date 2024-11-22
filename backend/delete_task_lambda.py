@@ -2,6 +2,9 @@ import json
 import boto3
 def lambda_handler(event, context):
 
+    user_id = event.get('queryStringParameters', {}).get('user_id')
+    description = event.get('queryStringParameters', {}).get('description')
+
     class DynamoDB:
         def __init__(self):
             self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
@@ -32,12 +35,8 @@ def lambda_handler(event, context):
         )
         return response
 
-    body = json.loads(event['body'])
-
     db_connection = DynamoDB()
 
-    user_id =  body.get('user_id')
-    description = body.get('description')
     if not user_id or not description:
         return {
             'statusCode': 400,
@@ -52,8 +51,7 @@ def lambda_handler(event, context):
             'body': json.dumps(response)
         }
     
-    updated_tasks = db_connection.get_tasks(user_id)
     return {
         'statusCode': 200,
-        'body': json.dumps(updated_tasks)
+        'body': "Task deleted"
     }

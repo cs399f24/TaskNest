@@ -51,21 +51,9 @@ export const Home = () => {
     }
   }, []);
 
-  const createNewTask = async () => {
-    // const userId = localStorage.getItem("user_id");
+  const updateTasks = async () => {
     const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
-  
-    if (newTodo !== '' && userId) {
-      try {
-        console.log(newTodo);
-        const response = await axios.post(`${backendUrl}/add`, {
-          user_id: userId,
-          description: newTodo,
-          time: new Date().toISOString()
-        }, {
-          headers: { 'Content-Type': 'application/json' }
-        });
-        axios
+    axios
         .get(`${backendUrl}/tasks`, {
           params: { user_id: userId },
           headers: { 'Content-Type': 'application/json' },
@@ -83,6 +71,23 @@ export const Home = () => {
           setTasks(tasks);
         })
         .catch(error => console.error('Error fetching tasks:', error));
+  }
+
+  const createNewTask = async () => {
+    // const userId = localStorage.getItem("user_id");
+    const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
+  
+    if (newTodo !== '' && userId) {
+      try {
+        console.log(newTodo);
+        const response = await axios.post(`${backendUrl}/add`, {
+          user_id: userId,
+          description: newTodo,
+          time: new Date().toISOString()
+        }, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+        updateTasks();
       } catch (error) {
         console.error('Error adding task:', error);
       }
@@ -92,8 +97,9 @@ export const Home = () => {
 
 
 const deleteTask = async (description) => {
-  const userId = localStorage.getItem("user_id");
-
+  // const userId = localStorage.getItem("user_id");
+  const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
+  console.log(description);
   if (!userId) {
       console.error('User ID is not available.');
       return;
@@ -103,7 +109,8 @@ const deleteTask = async (description) => {
       const response = await axios.delete(`${backendUrl}/delete`, {
           params: { user_id: userId, description: description }
       });
-      setTasks(response.data);
+      console.log(response);
+      updateTasks();
   } catch (error) {
       console.error('Error deleting task:', error);
   }
