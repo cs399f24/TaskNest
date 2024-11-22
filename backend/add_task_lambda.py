@@ -1,6 +1,8 @@
 import json
 import boto3
+
 def lambda_handler(event, context):
+    print("Event Received: ", json.dumps(event))
 
     class DynamoDB:
         def __init__(self):
@@ -12,9 +14,7 @@ def lambda_handler(event, context):
             response = self.table.get_item(Key={'user-id': user_id})
             if 'Item' not in response:
                 return []
-            
             tasks = response['Item'].get('tasks', [])
-            print(tasks)
             return tasks
 
         def add_task(self, user_id, task):
@@ -25,31 +25,63 @@ def lambda_handler(event, context):
                 ExpressionAttributeValues={':new_task': [task], ':empty_list': []},
                 ReturnValues="UPDATED_NEW"
             )
+            print(f"DynamoDB update response: {json.dumps(response)}")
             return response
 
-    body = json.loads(event['body'])
-    db_connection = DynamoDB()
-
-    if 'user_id' not in body or 'time' not in body or 'description' not in body:
+    if 'body' not in event or not event['body']:
         return {
             'statusCode': 400,
-            'body': json.dumps({"error": "Missing Parameters is required"})
+            # 'headers': {
+            #     'Access-Control-Allow-Origin': '*',
+            #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            #     'Access-Control-Allow-Headers': 'Content-Type'
+            # },
+            'body': json.dumps(["Request body is missing"])  # Ensure the body is a JSON string
         }
 
-    user_id = body.get('user_id')
-    task_description = body.get('description')
-    task_time = body.get('time')
+    if isinstance(event['body'], str):
+        try:
+            body = json.loads(event['body'])
+        except json.JSONDecodeError:
+            return {
+                'statusCode': 400,
+                # 'headers': {
+                #     'Access-Control-Allow-Origin': '*',
+                #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                #     'Access-Control-Allow-Headers': 'Content-Type'
+                # },
+                'body': json.dumps(["Invalid JSON format"])  # Ensure the body is a JSON string
+            }
+    else:
+        body = event['body']
+
+    db_connection = DynamoDB()
+
+    user_id = body['user_id']
+    task_description = body['description']
+    task_time = body['time']
     
     if not all([task_description, task_time, user_id]):
         return {
             'statusCode': 400,
-            'body': json.dumps({"error": "Description, time, and user_id are required."})
+            # 'headers': {
+            #     'Access-Control-Allow-Origin': '*',
+            #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            #     'Access-Control-Allow-Headers': 'Content-Type'
+            # },
+            'body': json.dumps(["Description, time, and user-id are required."])  # Ensure the body is a JSON string
         }
 
-    db_connection.add_task(user_id, {"description": task_description, "time": task_time})
-    updated_tasks = db_connection.get_tasks(user_id)
+    task = {"description": task_description, "time": task_time}
+    
+    db_connection.add_task(user_id, task)
 
     return {
-        'statusCode': 201,
-        'body': json.dumps(updated_tasks)
+        'statusCode': 200,
+        # 'headers': {
+        #         'Access-Control-Allow-Origin': '*',
+        #         'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        #         'Access-Control-Allow-Headers': 'Content-Type'
+        # },
+        'body': "Added"
     }

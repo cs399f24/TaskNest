@@ -23,7 +23,6 @@ export const Home = () => {
   } catch (error) {
     console.error('Error setting backend URL:', error);
   }
-  console.log('URL:', backendUrl);
 
   useEffect(() => {
     const userId = "b4089458-50e1-70bf-4e54-812dfa914f48";
@@ -35,10 +34,7 @@ export const Home = () => {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(response => {
-          console.log('Response:', response);
-  
           let tasks = response.data.body;
-          console.log('Tasks:', tasks);
           if (typeof tasks === 'string') {
             try {
               tasks = JSON.parse(tasks);
@@ -56,22 +52,44 @@ export const Home = () => {
   }, []);
 
   const createNewTask = async () => {
-    const userId = localStorage.getItem("user_id");
-
-    if (newTodo !== "" && userId) {
-        try {
-            const response = await axios.post(`${backendUrl}/add`, { 
-                description: newTodo, 
-                time: new Date().toISOString(),
-                user_id: userId
-            });
-            setTasks(response.data);
-            setNewTodo("");
-        } catch (error) {
-            console.error('Error adding task:', error);
-        }
+    // const userId = localStorage.getItem("user_id");
+    const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
+  
+    if (newTodo !== '' && userId) {
+      try {
+        console.log(newTodo);
+        const response = await axios.post(`${backendUrl}/add`, {
+          user_id: userId,
+          description: newTodo,
+          time: new Date().toISOString()
+        }, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+        axios
+        .get(`${backendUrl}/tasks`, {
+          params: { user_id: userId },
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(response => {
+          let tasks = response.data.body;
+          if (typeof tasks === 'string') {
+            try {
+              tasks = JSON.parse(tasks);
+            } catch (e) {
+              console.error('Error parsing tasks:', e);
+              tasks = [];
+            }
+          }
+          setTasks(tasks);
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
     }
-};
+  };
+  
+
 
 const deleteTask = async (description) => {
   const userId = localStorage.getItem("user_id");
