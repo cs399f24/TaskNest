@@ -9,53 +9,95 @@ export const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
 
-  let backendUrl = 'http://127.0.0.1:80';
+  const region = "us-east-1";
+  const API_ID = "nra2caqdd1";
+  const stage_name = "prod";
 
-  try {
-    const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
-    if (EC2_IP) {
-      backendUrl = `http://${EC2_IP}:80`;
-      console.log('Backend URL:', backendUrl); // for dev purposes
-    }
-  } catch (error) {
-    console.error('Error setting backend URL:', error);
-  }
+  let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
 
+  // Remembering EC2 :(
+  // try {
+  //   const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
+  //   if (EC2_IP) {
+  //     backendUrl = `http://${EC2_IP}:80`;
+  //   }
+  // } catch (error) {
+  //   console.error('Error setting backend URL:', error);
+  // }
+
+  //Axios is confusing so im thinking of using kosher fetch instead
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
-    
+  
     if (userId) {
-        axios.get(`${backendUrl}/tasks`, {
-            params: { user_id: userId }
+      axios
+        .get(`${backendUrl}/tasks`, {
+          params: { user_id: userId },
+          headers: { 'Content-Type': 'application/json' },
         })
-        .then(response => setTasks(response.data))
+        .then(response => {
+          let tasks = response.data.body;
+          if (typeof tasks === 'string') {
+            try {
+              tasks = JSON.parse(tasks);
+            } catch (e) {
+              console.error('Error parsing tasks:', e);
+              tasks = [];
+            }
+          }
+          setTasks(tasks);
+        })
         .catch(error => console.error('Error fetching tasks:', error));
     } else {
       window.location.href = '/log-in';
     }
   }, []);
 
+  const updateTasks = async () => {
+    const userId = localStorage.getItem("user_id");
+    axios
+        .get(`${backendUrl}/tasks`, {
+          params: { user_id: userId },
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then(response => {
+          let tasks = response.data.body;
+          if (typeof tasks === 'string') {
+            try {
+              tasks = JSON.parse(tasks);
+            } catch (e) {
+              console.error('Error parsing tasks:', e);
+              tasks = [];
+            }
+          }
+          setTasks(tasks);
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
+  }
+
   const createNewTask = async () => {
     const userId = localStorage.getItem("user_id");
-
-    if (newTodo !== "" && userId) {
-        try {
-            const response = await axios.post(`${backendUrl}/add`, { 
-                description: newTodo, 
-                time: new Date().toISOString(),
-                user_id: userId
-            });
-            setTasks(response.data);
-            setNewTodo("");
-        } catch (error) {
-            console.error('Error adding task:', error);
-        }
+  
+    if (newTodo !== '' && userId) {
+      try {
+        console.log(newTodo);
+        const response = await axios.post(`${backendUrl}/add`, {
+          user_id: userId,
+          description: newTodo,
+          time: new Date().toISOString()
+        }, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+        updateTasks();
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
     }
-};
+  };
 
 const deleteTask = async (description) => {
   const userId = localStorage.getItem("user_id");
-
+  console.log(description);
   if (!userId) {
       console.error('User ID is not available.');
       return;
@@ -65,7 +107,8 @@ const deleteTask = async (description) => {
       const response = await axios.delete(`${backendUrl}/delete`, {
           params: { user_id: userId, description: description }
       });
-      setTasks(response.data);
+      console.log(response);
+      updateTasks();
   } catch (error) {
       console.error('Error deleting task:', error);
   }

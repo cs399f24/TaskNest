@@ -40,7 +40,6 @@ def add_task():
 
     return jsonify(updated_tasks), 201
 
-
 @app.route('/delete', methods=['DELETE', 'OPTIONS'])
 def delete_task():
     """Delete a task by description."""
