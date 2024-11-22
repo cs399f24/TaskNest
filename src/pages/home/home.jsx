@@ -15,17 +15,18 @@ export const Home = () => {
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
 
-  try {
-    const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
-    if (EC2_IP) {
-      backendUrl = `http://${EC2_IP}:80`;
-    }
-  } catch (error) {
-    console.error('Error setting backend URL:', error);
-  }
+  // Remembering EC2 :(
+  // try {
+  //   const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
+  //   if (EC2_IP) {
+  //     backendUrl = `http://${EC2_IP}:80`;
+  //   }
+  // } catch (error) {
+  //   console.error('Error setting backend URL:', error);
+  // }
 
   useEffect(() => {
-    const userId = "b4089458-50e1-70bf-4e54-812dfa914f48";
+    const userId = localStorage.getItem("user_id");
   
     if (userId) {
       axios
@@ -52,7 +53,7 @@ export const Home = () => {
   }, []);
 
   const updateTasks = async () => {
-    const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
+    const userId = localStorage.getItem("user_id");
     axios
         .get(`${backendUrl}/tasks`, {
           params: { user_id: userId },
@@ -74,8 +75,7 @@ export const Home = () => {
   }
 
   const createNewTask = async () => {
-    // const userId = localStorage.getItem("user_id");
-    const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
+    const userId = localStorage.getItem("user_id");
   
     if (newTodo !== '' && userId) {
       try {
@@ -93,12 +93,9 @@ export const Home = () => {
       }
     }
   };
-  
-
 
 const deleteTask = async (description) => {
-  // const userId = localStorage.getItem("user_id");
-  const userId = 'b4089458-50e1-70bf-4e54-812dfa914f48';
+  const userId = localStorage.getItem("user_id");
   console.log(description);
   if (!userId) {
       console.error('User ID is not available.');
