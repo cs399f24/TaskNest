@@ -25,6 +25,7 @@ export const Home = () => {
   //   console.error('Error setting backend URL:', error);
   // }
 
+  //Axios is confusing so im thinking of using kosher fetch instead
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
   
