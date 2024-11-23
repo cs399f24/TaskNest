@@ -1,6 +1,10 @@
 # TaskNest
 
+
 A robust web-based task management application that helps users organize and track their daily tasks with real-time notifications and deadline reminders.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ba11aa6d-223c-4e1e-81e3-1eabb871902b" alt="GIF">
+</p>
 
 ## 🌟 Features
 
@@ -62,8 +66,8 @@ pip install -r requirements.txt
 
 ### Backend Scripts
 
-- `flask run` - Starts the Flask development server
-- `python manage.py test` - Runs backend tests
+- `flask run` or `python app.py`- Starts the Flask development server
+
 
 ## 🗄️ Database Structure
 
