@@ -1,96 +1,127 @@
 # TaskNest
 
-A web-based application for keeping track of tasks in a users given day.
+A robust web-based task management application that helps users organize and track their daily tasks with real-time notifications and deadline reminders.
 
-Using React for the front-end presented to the user using `AWS S3`
-The back-end of the application is hosted on a `AWS EC2` instance using `flask` and `AWS DynamoDB` to store data
-`AWS Cognito` to support users for the application. Notifications will use the Unix Timestamp in the database and alert users of deadlines, or times when a task is to be completed.
+## 🌟 Features
 
-### Documentation:
-  - [`S3`](docs/s3.md)
-  - [`EC2`](docs/ec2.md)
-  - [`Cognito`](docs/cognito.md)
-  - [`DynamoDB`](docs/dynamodb.md)
-  - [`AWS EC2 & S3 Launch Script Guide`](docs/launch_aws.md) - Full documentation explaining the `launch_aws.sh` file.
+- User authentication and authorization
+- Real-time task tracking and management
+- Deadline notifications using Unix timestamps
+- Responsive web interface
+- Secure data storage and retrieval
 
-## Available Scripts
+## 🏗️ Architecture
 
-To use the react scripts you must first run the following command to download project dependencies:
+TaskNest is built using a modern cloud-native architecture:
 
-##### `npm install`
+- **Frontend**: React.js application hosted on AWS S3
+- **Backend**: Flask REST API running on AWS EC2 (Will be changed to API Gateway Soon)
+- **Database**: AWS DynamoDB for scalable data storage
+- **Authentication**: AWS Cognito for secure user management
+- **Storage**: AWS S3 for static file hosting
+- **Notifications**: Real-time alerts based on Unix timestamps
 
-In the project directory, you can run:
+## 🚀 Getting Started
 
-##### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+- Python 3.8+
+- AWS CLI configured with appropriate credentials
+- Git
 
-In the project directory, you can run:
+### Installation
 
-##### `npm start`
+1. Clone the repository:
+```bash
+git clone https://github.com/cs399f24/TaskNest.git
+cd TaskNest
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2. Install frontend dependencies:
+```bash
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+3. Install backend dependencies:
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-##### `npm test`
+## 📋 Available Scripts
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend Scripts
 
-<!-- The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- `npm start` - Runs the app in development mode at [http://localhost:3000](http://localhost:3000)
+- `npm test` - Launches the test runner in interactive watch mode
+- `npm run build` - Builds the app for production in the `build` folder
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend Scripts
 
-### `npm run eject`
+- `flask run` - Starts the Flask development server
+- `python manage.py test` - Runs backend tests
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🗄️ Database Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+TaskNest uses DynamoDB with the following schema:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```javascript
+{
+  "user-id": {
+    "S": "DEV_USER"
+  },
+  "tasks": {
+    "L": [
+      {
+        "M": {
+          "description": {
+            "S": "test-description"
+          },
+          "time": {
+            "S": "test-time"
+          }
+        }
+      }
+    ]
+  }
+}
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📚 Documentation
 
-### Code Splitting
+Detailed documentation is available for all AWS services used in the project:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- [S3 Configuration](docs/s3.md)
+- [EC2 Setup](docs/ec2.md)
+- [Cognito Integration](docs/cognito.md)
+- [DynamoDB Schema](docs/dynamodb.md)
+- [AWS Launch Script Guide](docs/launch_aws.md)
 
-### Analyzing the Bundle Size
+## 🚀 Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The application can be deployed using the provided AWS launch script. Refer to the [AWS Launch Script Guide](docs/launch_aws.md) for detailed deployment instructions.
 
-### Making a Progressive Web App
+## 🔒 Security
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+TaskNest implements several security measures:
 
-### Advanced Configuration
+- AWS Cognito for secure user authentication
+- HTTPS encryption for all API communications
+- Secure storage of sensitive data in DynamoDB
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify) -->
+## 🙏 Acknowledgments
 
-For a database we will be using DynamoDB
-
-the value of `"time"` is a unix time stamp.
-
-`user#1` in this case will be the user's id probably a hash generated by AWS Cognito.
-
-DynamoDB table will have the following structure:
-...
+- React.js community
+- AWS Documentation
+- Flask Documentation
