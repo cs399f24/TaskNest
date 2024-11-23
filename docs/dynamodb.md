@@ -5,7 +5,7 @@
 
 2. **Create a table**
    - From the DynamoDB welcome page, select "Create table".
-   - Enter the table name: `TaskNest-users`.
+   - Enter the table name: `task-nest-users`.
    - Enter your Partition key: `user_id`.
    - Choose the Read/Write Capacity Mode (this can be edited later).
    - Select **Provisioned**.
