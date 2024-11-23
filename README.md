@@ -106,6 +106,7 @@ Detailed documentation is available for all AWS services used in the project:
 - [EC2 Setup](docs/ec2.md)
 - [Cognito Integration](docs/cognito.md)
 - [DynamoDB Schema](docs/dynamodb.md)
+- [Lambda](docs/lambda.md)
 - [AWS Launch Script Guide](docs/launch_aws.md)
 
 ## 🚀 Deployment
