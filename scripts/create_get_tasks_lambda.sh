@@ -21,4 +21,5 @@ aws lambda create-function --function-name get_tasks \
 echo "Waiting for get_tasks function to be active..."
 aws lambda wait function-active --function-name get_tasks
 aws lambda publish-version --function-name get_tasks > /dev/null 2>&1
+rm -rf objects/get_tasks_lambda.zip
 echo "Created get_tasks lambda function"

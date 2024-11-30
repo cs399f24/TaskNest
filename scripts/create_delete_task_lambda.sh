@@ -21,4 +21,5 @@ aws lambda create-function --function-name delete_task \
 echo "Waiting for delete_task function to be active..."
 aws lambda wait function-active --function-name delete_task
 aws lambda publish-version --function-name delete_task > /dev/null 2>&1
+rm -rf objects/delete_task_lambda.zip
 echo "Created delete_task lambda function"
