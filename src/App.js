@@ -1,21 +1,25 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './pages/home/home';
-import SignUp from './pages/signUp/SignUp';
 import Navbar from './components/navbar/Navbar';
-import  LogIn  from './pages/logIn/LogIn';
-import AmplifyApp from './amplify/AmplifyApp';
+import { Authenticator } from '@aws-amplify/ui-react';
+
+import AmplifyApp from './AmplifyApp';
 
 function App() {
-
   return (
     <div className="App">
       <Router>
-      <Navbar />
-        <Routes>
-          <Route path="/" element={<AmplifyApp/>} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/log-in" element={<LogIn />} />
-        </Routes>
+        <Authenticator>
+          {({ signOut, user }) => (
+            <>
+              <Navbar signOut={signOut} />
+              <Routes>
+                <Route path="/" element={<AmplifyApp/>} />
+                <Route path="/home" element={<Home />} />
+              </Routes>
+            </>
+          )}
+        </Authenticator>
       </Router>
     </div>
   );

@@ -28,6 +28,7 @@ export const Home = () => {
   //Axios is confusing so im thinking of using kosher fetch instead
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
+    console.log(userId);
   
     if (userId) {
       axios
