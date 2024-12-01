@@ -1,32 +1,34 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Amplify } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import Navbar from './components/navbar/Navbar';  // Adjust the path as needed
+import Navbar from './components/navbar/Navbar';
 
 import awsExports from './aws-exports';
 Amplify.configure(awsExports);
 
-export const AmplifyApp = () => {
+// Separate component for authenticated state
+const AuthenticatedContent = ({ user, signOut }) => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (user) {
+      console.log('Current user:', user);
+      localStorage.setItem('user_id', user.username);
+      navigate('/home');
+    }
+  }, [user, navigate]);
+
+  return null; // or return a loading spinner if needed
+};
+
+export const AmplifyApp = () => {
   return (
     <Authenticator>
-      {({ signOut, user }) => {
-        console.log('Current user:', user);
-        localStorage.setItem('user_id', user.username);
-        navigate('/home');
-        
-        return (
-          <main>
-            <Navbar signOut={signOut} />
-            <h1>Hello {user.username}</h1>
-          </main>
-        );
-      }}
+      {(props) => <AuthenticatedContent {...props} />}
     </Authenticator>
   );
-}
+};
 
 export default AmplifyApp;
