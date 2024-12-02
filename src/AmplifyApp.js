@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import Navbar from './components/navbar/Navbar';
+import './amplifyApp.css'
+import {motion} from 'framer-motion';
 
 import awsExports from './aws-exports';
 Amplify.configure(awsExports);

@@ -2,7 +2,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './pages/home/home';
 import Navbar from './components/navbar/Navbar';
 import { Authenticator } from '@aws-amplify/ui-react';
-
+import './App.css'; 
 import AmplifyApp from './AmplifyApp';
 
 function App() {

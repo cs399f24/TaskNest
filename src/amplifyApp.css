@@ -1,0 +1,131 @@
+[data-amplify-authenticator] [data-amplify-router] {
+    background: radial-gradient(circle at 10% 20%, #e97a81 0%, rgb(181, 64, 149) 100.2%);
+    box-shadow: var(--amplify-components-authenticator-router-box-shadow);
+    border-color: white;
+    border-width: .2px;
+    border-style: var(--amplify-components-authenticator-router-border-style);
+    box-shadow: rgba(255, 105, 180, 0.4) 5px 5px, rgba(255, 105, 180, 0.3) 10px 10px, rgba(255, 105, 180, 0.2) 15px 15px, rgba(255, 105, 180, 0.1) 20px 20px, rgba(255, 165, 0, 0.05) 25px 25px;
+
+
+}
+
+.amplify-heading {
+    color: white;
+    line-height: var(--amplify-components-heading-line-height);
+    display: block;
+}
+
+.amplify-tabs__item--active {
+    color: white;
+    border-color: #e97a81;
+    background-color: var(--amplify-components-tabs-item-active-background-color);
+    transition-property: none;
+}
+
+.amplify-tabs__item {
+    position: relative;
+    background-color: var(--amplify-components-tabs-item-background-color);
+    box-sizing: border-box;
+    color: rgba(255, 255, 255, 0.837);
+    font-size: var(--amplify-components-tabs-item-font-size);
+    font-weight: var(--amplify-components-tabs-item-font-weight);
+    padding: var(--amplify-components-tabs-item-padding-vertical) var(--amplify-components-tabs-item-padding-horizontal);
+    text-align: var(--amplify-components-tabs-item-text-align);
+    transition: all var(--amplify-components-tabs-item-transition-duration);
+    border-width: var(--internal-item-border-width);
+    border-style: var(--amplify-components-tabs-item-border-style);
+    border-color: var(--amplify-components-tabs-item-border-color);
+    flex: var(--internal-item-flex);
+    margin-block-start: var(--internal-item-margin-start);
+    margin-block-end: var(--internal-item-margin-end);
+}
+
+.amplify-tabs__item:hover {
+    position: relative;
+    background-color: var(--amplify-components-tabs-item-background-color);
+    box-sizing: border-box;
+    color: rgb(249, 249, 249);
+    font-size: var(--amplify-components-tabs-item-font-size);
+    font-weight: var(--amplify-components-tabs-item-font-weight);
+    padding: var(--amplify-components-tabs-item-padding-vertical) var(--amplify-components-tabs-item-padding-horizontal);
+    text-align: var(--amplify-components-tabs-item-text-align);
+    transition: all var(--amplify-components-tabs-item-transition-duration);
+    border-width: var(--internal-item-border-width);
+    border-style: var(--amplify-components-tabs-item-border-style);
+    border-color: #e97a81;
+    flex: var(--internal-item-flex);
+    margin-block-start: var(--internal-item-margin-start);
+    margin-block-end: var(--internal-item-margin-end);
+}
+
+
+.amplify-button--small {
+    color: white;
+    font-size: var(--amplify-components-button-small-font-size);
+    padding-block-start: var(--amplify-components-button-small-padding-block-start);
+    padding-block-end: var(--amplify-components-button-small-padding-block-end);
+    padding-inline-start: var(--amplify-components-button-small-padding-inline-start);
+    padding-inline-end: var(--amplify-components-button-small-padding-inline-end);
+}
+
+.amplify-button--small:hover {
+    color: rgb(16, 15, 15);
+    font-size: var(--amplify-components-button-small-font-size);
+    padding-block-start: var(--amplify-components-button-small-padding-block-start);
+    padding-block-end: var(--amplify-components-button-small-padding-block-end);
+    padding-inline-start: var(--amplify-components-button-small-padding-inline-start);
+    padding-inline-end: var(--amplify-components-button-small-padding-inline-end);
+}
+
+.amplify-icon > svg {
+    height: var(--amplify-components-icon-height);
+    width: var(--amplify-components-icon-height);
+    color: white;
+}
+
+
+
+
+
+.amplify-authenticator {
+    background-color: #FFC0CB !important; /* Light pink background */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Target the form container */
+  .amplify-container {
+    background-color: #FFC0CB !important; /* Light pink form container */
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  /* Change button colors */
+  .amplify-button--primary {
+    background-color: #FF69B4 !important; /* Hot pink buttons */
+    color: white !important;
+    border: none;
+  }
+  
+  /* Change input fields background */
+  .amplify-input {
+    background-color: #fefefe !important; /* Light pink input fields */
+    border: 1px solid #FFB6C1 !important;
+  }
+  
+  /* Change text color */
+  .amplify-label {
+    color: #ffffff !important; /* Darker pink for labels */
+  }
+
+
+
+  .amplify-button {
+    border-color: white;
+
+}
+
+
+  
