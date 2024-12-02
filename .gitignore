@@ -23,10 +23,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # venv
-*.venv/
+.venv/
 
 # Objects
-*.zip
+/scripts/objects/*
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
