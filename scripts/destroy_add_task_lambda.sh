@@ -1,0 +1,1 @@
+aws lambda delete-function --function-name "add_task"
