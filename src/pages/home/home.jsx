@@ -31,6 +31,8 @@ export const Home = () => {
       })
         .then(async (response) => {
           if (!response.ok) {
+            localStorage.clear();
+            window.location.href = '/log-in';
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           let tasks = await response.json();

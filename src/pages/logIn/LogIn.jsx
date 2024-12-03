@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 export const LogIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmationCode, setConfirmationCode] = useState(""); // New state for confirmation code
-    const [showConfirmationInput, setShowConfirmationInput] = useState(false); // Track if confirmation input should show
+    const [confirmationCode, setConfirmationCode] = useState("");
+    const [showConfirmationInput, setShowConfirmationInput] = useState(false);
     const [errorMessages, setErrorMessages] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate();
