@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Card } from '../../components/card/card';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import './home.css';
-import { desc } from 'framer-motion/client';
 
 export const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
+  const [authToken, setAuthToken] = useState(null);
 
   const region = "us-east-1";
   const API_ID = "nra2caqdd1";
@@ -15,105 +16,97 @@ export const Home = () => {
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
 
-  // Remembering EC2 :(
-  // try {
-  //   const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
-  //   if (EC2_IP) {
-  //     backendUrl = `http://${EC2_IP}:80`;
-  //   }
-  // } catch (error) {
-  //   console.error('Error setting backend URL:', error);
-  // }
-
-  //Axios is confusing so im thinking of using kosher fetch instead
+  // Get auth token on component mount
   useEffect(() => {
-    const userId = localStorage.getItem("user_id");
-    console.log(userId);
-  
-    if (userId) {
-      axios
-        .get(`${backendUrl}/tasks`, {
-          params: { user_id: userId },
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(response => {
-          let tasks = response.data.body;
-          if (typeof tasks === 'string') {
-            try {
-              tasks = JSON.parse(tasks);
-            } catch (e) {
-              console.error('Error parsing tasks:', e);
-              tasks = [];
-            }
-          }
-          setTasks(tasks);
-        })
-        .catch(error => console.error('Error fetching tasks:', error));
-    } else {
-      window.location.href = '/log-in';
-    }
+    const getAuthToken = async () => {
+      try {
+        const session = await fetchAuthSession();
+        const token = session.tokens.idToken.toString();
+        setAuthToken(token);
+        // Once we have the token, fetch tasks
+        fetchTasks(token);
+      } catch (error) {
+        console.error('Error getting authentication token:', error);
+        // Redirect to login if auth fails
+        window.location.href = '/log-in';
+      }
+    };
+
+    getAuthToken();
   }, []);
 
-  const updateTasks = async () => {
-    const userId = localStorage.getItem("user_id");
-    axios
-        .get(`${backendUrl}/tasks`, {
-          params: { user_id: userId },
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(response => {
-          let tasks = response.data.body;
-          if (typeof tasks === 'string') {
-            try {
-              tasks = JSON.parse(tasks);
-            } catch (e) {
-              console.error('Error parsing tasks:', e);
-              tasks = [];
-            }
-          }
-          setTasks(tasks);
-        })
-        .catch(error => console.error('Error fetching tasks:', error));
-  }
-
-  const createNewTask = async () => {
-    const userId = localStorage.getItem("user_id");
-  
-    if (newTodo !== '' && userId) {
-      try {
-        console.log(newTodo);
-        const response = await axios.post(`${backendUrl}/add`, {
-          user_id: userId,
-          description: newTodo,
-          time: new Date().toISOString()
-        }, {
-          headers: { 'Content-Type': 'application/json' }
-        });
-        updateTasks();
-      } catch (error) {
-        console.error('Error adding task:', error);
+  const fetchTasks = async (token) => {
+    try {
+      const response = await axios.get(`${backendUrl}/tasks`, {
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      let tasks = response.data.body;
+      if (typeof tasks === 'string') {
+        tasks = JSON.parse(tasks);
+      }
+      setTasks(tasks);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      if (error.response?.status === 401) {
+        window.location.href = '/log-in';
       }
     }
   };
 
-const deleteTask = async (description) => {
-  const userId = localStorage.getItem("user_id");
-  console.log(description);
-  if (!userId) {
-      console.error('User ID is not available.');
-      return;
-  }
+  const updateTasks = async () => {
+    if (authToken) {
+      await fetchTasks(authToken);
+    }
+  };
 
-  try {
-      const response = await axios.delete(`${backendUrl}/delete`, {
-          params: { user_id: userId, description: description }
+  const createNewTask = async () => {
+    if (newTodo !== '' && authToken) {
+      try {
+        await axios.post(`${backendUrl}/add`, {
+          description: newTodo,
+          time: new Date().toISOString()
+        }, {
+          headers: {
+            'Authorization': authToken,
+            'Content-Type': 'application/json'
+          }
+        });
+        await updateTasks();
+        setNewTodo(""); // Clear input after successful creation
+      } catch (error) {
+        console.error('Error adding task:', error);
+        if (error.response?.status === 401) {
+          window.location.href = '/log-in';
+        }
+      }
+    }
+  };
+
+  const deleteTask = async (description) => {
+    if (!authToken) {
+      console.error('Not authenticated');
+      return;
+    }
+
+    try {
+      await axios.delete(`${backendUrl}/delete`, {
+        params: { description },
+        headers: {
+          'Authorization': authToken
+        }
       });
-      console.log(response);
-      updateTasks();
-  } catch (error) {
+      await updateTasks();
+    } catch (error) {
       console.error('Error deleting task:', error);
-  }
-};
+      if (error.response?.status === 401) {
+        window.location.href = '/log-in';
+      }
+    }
+  };
 
   return (
     <div className="Home">
@@ -150,6 +143,6 @@ const deleteTask = async (description) => {
       </div>
     </div>
   );
-}
+};
 
 export default Home;
