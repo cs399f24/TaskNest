@@ -15,65 +15,76 @@ export const Home = () => {
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
 
-  // Remembering EC2 :(
-  // try {
-  //   const EC2_IP = process.env.REACT_APP_EC2_PUBLIC_IP;
-  //   if (EC2_IP) {
-  //     backendUrl = `http://${EC2_IP}:80`;
-  //   }
-  // } catch (error) {
-  //   console.error('Error setting backend URL:', error);
-  // }
-
   //Axios is confusing so im thinking of using kosher fetch instead
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
   
     if (userId) {
-      axios
-        .get(`${backendUrl}/tasks`, {
-          params: { user_id: userId },
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(response => {
-          let tasks = response.data.body;
-          if (typeof tasks === 'string') {
+      fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          let tasks = await response.json();
+  
+          if (typeof tasks.body === 'string') {
             try {
-              tasks = JSON.parse(tasks);
+              tasks = JSON.parse(tasks.body);
             } catch (e) {
               console.error('Error parsing tasks:', e);
               tasks = [];
             }
+          } else {
+            tasks = tasks.body;
           }
+  
           setTasks(tasks);
         })
-        .catch(error => console.error('Error fetching tasks:', error));
+        .catch((error) => {
+          console.error('Error fetching tasks:', error);
+        });
     } else {
       window.location.href = '/log-in';
     }
   }, []);
-
+  
   const updateTasks = async () => {
     const userId = localStorage.getItem("user_id");
-    axios
-        .get(`${backendUrl}/tasks`, {
-          params: { user_id: userId },
-          headers: { 'Content-Type': 'application/json' },
-        })
-        .then(response => {
-          let tasks = response.data.body;
-          if (typeof tasks === 'string') {
-            try {
-              tasks = JSON.parse(tasks);
-            } catch (e) {
-              console.error('Error parsing tasks:', e);
-              tasks = [];
-            }
-          }
-          setTasks(tasks);
-        })
-        .catch(error => console.error('Error fetching tasks:', error));
-  }
+  
+    if (!userId) {
+      console.error("User ID is missing. Unable to fetch tasks.");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      let tasks = await response.json();
+  
+      if (typeof tasks.body === 'string') {
+        try {
+          tasks = JSON.parse(tasks.body);
+        } catch (e) {
+          console.error('Error parsing tasks:', e);
+          tasks = [];
+        }
+      } else {
+        tasks = tasks.body;
+      }
+  
+      setTasks(tasks);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
 
   const createNewTask = async () => {
     const userId = localStorage.getItem("user_id");
@@ -81,38 +92,58 @@ export const Home = () => {
     if (newTodo !== '' && userId) {
       try {
         console.log(newTodo);
-        const response = await axios.post(`${backendUrl}/add`, {
-          user_id: userId,
-          description: newTodo,
-          time: new Date().toISOString()
-        }, {
-          headers: { 'Content-Type': 'application/json' }
+  
+        const response = await fetch(`${backendUrl}/add`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: userId,
+            description: newTodo,
+            time: new Date().toISOString()
+          }),
         });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const result = await response.json();
+        console.log('Task added successfully:', result);
+  
         updateTasks();
       } catch (error) {
         console.error('Error adding task:', error);
       }
     }
   };
-
-const deleteTask = async (description) => {
-  const userId = localStorage.getItem("user_id");
-  console.log(description);
-  if (!userId) {
+  
+  const deleteTask = async (description) => {
+    const userId = localStorage.getItem("user_id");
+    console.log(description);
+  
+    if (!userId) {
       console.error('User ID is not available.');
       return;
-  }
-
-  try {
-      const response = await axios.delete(`${backendUrl}/delete`, {
-          params: { user_id: userId, description: description }
+    }
+  
+    try {
+      const url = `${backendUrl}/delete?user_id=${encodeURIComponent(userId)}&description=${encodeURIComponent(description)}`;
+  
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
       });
-      console.log(response);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      console.log('Task deleted successfully');
       updateTasks();
-  } catch (error) {
+    } catch (error) {
       console.error('Error deleting task:', error);
-  }
-};
+    }
+  };  
 
   return (
     <div className="Home">
