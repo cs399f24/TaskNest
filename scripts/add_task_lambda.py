@@ -3,45 +3,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
-    print("Event Received: ", json.dumps(event))
-
-    # Get the token from the 'Authorization' header
-    token = None
-    if 'headers' in event and 'Authorization' in event['headers']:
-        token = event['headers']['Authorization']
-    if not token:
-        return {
-            'statusCode': 401,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
-            },
-            'body': json.dumps(["Authorization token is missing"])
-        }
-
-    if token.startswith("Bearer "):
-        token = token[7:]
-
-    cognito_client = boto3.client('cognito-idp')
-
-    try:
-        response = cognito_client.get_user(
-            AccessToken=token
-        )
-        print(f"User validated: {json.dumps(response)}")
-        user_id = response['Username']
-    except ClientError as e:
-        return {
-            'statusCode': 403,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
-            },
-            'body': json.dumps([f"Token validation failed: {str(e)}"])
-        }
-
+    
     class DynamoDB:
         def __init__(self):
             self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
@@ -74,7 +36,7 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type'
             },
-            'body': json.dumps(["Request body is missing"])  # Ensure the body is a JSON string
+            'body': json.dumps(["Request body is missing"])
         }
 
     if isinstance(event['body'], str):
@@ -88,7 +50,7 @@ def lambda_handler(event, context):
                     'Access-Control-Allow-Methods': 'POST, OPTIONS',
                     'Access-Control-Allow-Headers': 'Content-Type'
                 },
-                'body': json.dumps(["Invalid JSON format"])  # Ensure the body is a JSON string
+                'body': json.dumps(["Invalid JSON format"])
             }
     else:
         body = event['body']
@@ -106,11 +68,13 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type'
             },
-            'body': json.dumps(["Description and time are required."])  # Ensure the body is a JSON string
+            'body': json.dumps(["Description and time are required."])
         }
 
     task = {"description": task_description, "time": task_time}
     
+    user_id = body.get("user_id")
+
     db_connection.add_task(user_id, task)
 
     task_list = db_connection.get_tasks(user_id)

@@ -10,7 +10,7 @@ export const Home = () => {
   const [newTodo, setNewTodo] = useState("");
 
   const region = "us-east-1";
-  const API_ID = "nra2caqdd1";
+  const API_ID = "1r0yw16xc5";
   const stage_name = "prod";
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
@@ -22,10 +22,12 @@ export const Home = () => {
   
     if (userId || accessToken || idToken) {
       fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${idToken}`,
         },
+        mode: 'cors',
       })
         .then(async (response) => {
           if (!response.ok) {
@@ -67,7 +69,7 @@ export const Home = () => {
       const response = await fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${idToken}`,
         },
       });
   
@@ -107,13 +109,14 @@ export const Home = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${idToken}`,
           },
           body: JSON.stringify({
             user_id: userId,
             description: newTodo,
             time: new Date().toISOString()
           }),
+          mode: 'cors',
         });
   
         if (!response.ok) {
@@ -148,8 +151,9 @@ export const Home = () => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${idToken}`,
         },
+        mode: 'cors',
       });
   
       if (!response.ok) {

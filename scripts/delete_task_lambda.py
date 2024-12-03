@@ -43,7 +43,7 @@ def lambda_handler(event, context):
             'body': json.dumps({"error": "User ID and description are required"}),
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                 'Access-Control-Allow-Methods': 'OPTIONS,DELETE',
             }
         }
@@ -56,7 +56,7 @@ def lambda_handler(event, context):
             'body': json.dumps(response),
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                 'Access-Control-Allow-Methods': 'OPTIONS,DELETE',
             }
         }
@@ -66,7 +66,7 @@ def lambda_handler(event, context):
         'body': json.dumps({"message": "Task deleted successfully"}),
         'headers': {
             'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
             'Access-Control-Allow-Methods': 'OPTIONS,DELETE',
         }
     }
