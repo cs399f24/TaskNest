@@ -15,13 +15,17 @@ export const Home = () => {
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
 
-  //Axios is confusing so im thinking of using kosher fetch instead
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
+    const accessToken = localStorage.getItem("accessToken");
+    const idToken = localStorage.getItem("idToken");
   
-    if (userId) {
+    if (userId || accessToken || idToken) {
       fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
       })
         .then(async (response) => {
           if (!response.ok) {
@@ -39,7 +43,6 @@ export const Home = () => {
           } else {
             tasks = tasks.body;
           }
-  
           setTasks(tasks);
         })
         .catch((error) => {
@@ -51,16 +54,21 @@ export const Home = () => {
   }, []);
   
   const updateTasks = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
   
-    if (!userId) {
+    if (!userId || !accessToken) {
       console.error("User ID is missing. Unable to fetch tasks.");
       return;
     }
   
     try {
       const response = await fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
   
       if (!response.ok) {
@@ -87,6 +95,8 @@ export const Home = () => {
   };
 
   const createNewTask = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
   
     if (newTodo !== '' && userId) {
@@ -95,7 +105,10 @@ export const Home = () => {
   
         const response = await fetch(`${backendUrl}/add`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
           body: JSON.stringify({
             user_id: userId,
             description: newTodo,
@@ -118,6 +131,8 @@ export const Home = () => {
   };
   
   const deleteTask = async (description) => {
+    const accessToken = localStorage.getItem("accessToken");
+    const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
     console.log(description);
   
@@ -131,7 +146,10 @@ export const Home = () => {
   
       const response = await fetch(url, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
       });
   
       if (!response.ok) {

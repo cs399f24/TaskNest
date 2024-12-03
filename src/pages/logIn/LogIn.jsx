@@ -31,14 +31,18 @@ export const LogIn = () => {
         user.authenticateUser(authDetails, {
             onSuccess: data => {
                 console.log("onSuccess:", data);
+                const accessToken = data.getAccessToken().getJwtToken();
+                const idToken = data.getIdToken().getJwtToken();
                 setErrorMessages("");
                 setSuccessMessage("Login successful!");
                 const userId = data.idToken.payload.sub;
-                localStorage.setItem("user_id", userId); // Store in localStorage for later retrieval
+                localStorage.setItem("accessToken", accessToken);
+                localStorage.setItem("idToken", idToken);
+                localStorage.setItem("user_id", userId);
+                console.log("Access Token:", accessToken);
+                console.log("ID Token:", idToken);
                 console.log("User ID:", userId);
-                navigate('/'); // Navigate to home page
-                
-        
+                navigate('/');
             },
             onFailure: err => {
                 console.error("onFailure:", err);
