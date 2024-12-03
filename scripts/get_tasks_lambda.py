@@ -25,6 +25,7 @@ def lambda_handler(event, context):
         }
 
     response = table.get_item(Key={'user-id': user_id})
+    
     if 'Item' not in response:
         return {
             'statusCode': 200,
@@ -35,7 +36,7 @@ def lambda_handler(event, context):
             },
             'body': json.dumps([])
         }
-    
+
     tasks = response['Item'].get('tasks', [])
     return {
         'statusCode': 200,

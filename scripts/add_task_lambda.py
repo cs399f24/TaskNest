@@ -31,11 +31,11 @@ def lambda_handler(event, context):
     if 'body' not in event or not event['body']:
         return {
             'statusCode': 400,
-            # 'headers': {
-            #     'Access-Control-Allow-Origin': '*',
-            #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            #     'Access-Control-Allow-Headers': 'Content-Type'
-            # },
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
             'body': json.dumps(["Request body is missing"])  # Ensure the body is a JSON string
         }
 
@@ -45,11 +45,11 @@ def lambda_handler(event, context):
         except json.JSONDecodeError:
             return {
                 'statusCode': 400,
-                # 'headers': {
-                #     'Access-Control-Allow-Origin': '*',
-                #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                #     'Access-Control-Allow-Headers': 'Content-Type'
-                # },
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type'
+                },
                 'body': json.dumps(["Invalid JSON format"])  # Ensure the body is a JSON string
             }
     else:
@@ -64,11 +64,11 @@ def lambda_handler(event, context):
     if not all([task_description, task_time, user_id]):
         return {
             'statusCode': 400,
-            # 'headers': {
-            #     'Access-Control-Allow-Origin': '*',
-            #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            #     'Access-Control-Allow-Headers': 'Content-Type'
-            # },
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
             'body': json.dumps(["Description, time, and user-id are required."])  # Ensure the body is a JSON string
         }
 
@@ -76,12 +76,14 @@ def lambda_handler(event, context):
     
     db_connection.add_task(user_id, task)
 
+    task_list = db_connection.get_tasks(user_id)
+
     return {
         'statusCode': 200,
-        # 'headers': {
-        #         'Access-Control-Allow-Origin': '*',
-        #         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        #         'Access-Control-Allow-Headers': 'Content-Type'
-        # },
-        'body': "Added"
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS, GET',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        'body': json.dumps(task_list, default=str)
     }

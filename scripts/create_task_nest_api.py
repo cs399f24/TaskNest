@@ -77,7 +77,7 @@ def create_method(client, api_id, resource_id, method, lambda_function_name, is_
 
 # /tasks
 tasks = client.create_resource(restApiId=api_id, parentId=root_id, pathPart='tasks')
-create_method(client, api_id, tasks["id"], 'GET', 'get-tasks')
+create_method(client, api_id, tasks["id"], 'GET', 'get_tasks')
 
 # /add
 add_resource = client.create_resource(restApiId=api_id, parentId=root_id, pathPart='add')
