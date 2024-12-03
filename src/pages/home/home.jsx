@@ -8,6 +8,7 @@ import { desc } from 'framer-motion/client';
 export const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTodo, setNewTodo] = useState("");
+  const [newTime, setNewTime] = useState("");
 
   const region = "us-east-1";
   const API_ID = "1r0yw16xc5";
@@ -186,6 +187,13 @@ export const Home = () => {
             value={newTodo}
             placeholder="Add Tasks Here"
           />
+          <input
+            className="time-input"
+            type="text"
+            onChange={(e) => setNewTime(e.target.value)}
+            value={newTime}
+            placeholder="Add Due Date"
+          />
           <button className="todo-add-btn" onClick={createNewTask}>Add</button>
         </div>
       </motion.div>
@@ -198,9 +206,15 @@ export const Home = () => {
             deleteTask={() => deleteTask(task.description)}
             number={index + 1}
             description={task.description}
-            time={task.time}
+            time={new Date(task.time).toLocaleString('default', {
+              month: 'short',       // Abbreviated month name (e.g., Dec)
+              day: 'numeric',       // Day of the month (e.g., 3)
+              hour: '2-digit',      // Hour in 12-hour format
+              minute: '2-digit',    // Minutes
+              hour12: true          // Use 12-hour clock (AM/PM)
+            })}
           />
-        ))}
+              ))}
       </div>
     </div>
   );
