@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Quicksand:wght@300..700&display=swap');
 
 .Home {
-    padding-top: 100px;
+  padding-top: 100px;
   background: radial-gradient(circle at 10% 20%, rgb(233, 122, 129) 0%, rgb(181, 64, 149) 100.2%);
   font-family: "Quicksand", sans-serif;
   min-height: 100vh;
@@ -13,7 +13,7 @@
   margin: 0 auto;
   max-width: 400px;
   width: 100%;
-  height: 260px;
+  height: 240px;
   background-color: #fffffffa;
   padding-left: 20px;
   padding-right: 20px;
@@ -88,6 +88,15 @@
   padding-left: 20px;
 }
 
+.btn-flex-ct {
+  margin: 0 auto;
+  margin-top: 10px;
+
+  width: 90%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
 
 
 .todo-add-btn {
@@ -123,6 +132,28 @@
   width: 90%;
 }
 
+.todo-calendar-btn {
+  height: 41px;
+  max-width: 100px;
+  width: 100%;
+
+  background-color: rgb(255, 85, 0);
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: "Quicksand", sans-serif;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+
+.calendar-container {
+  z-index: 10000000;
+}
 
 @media screen and (max-width: 1769px) {
   .todo-grid {
