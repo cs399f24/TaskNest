@@ -17,14 +17,13 @@ export const SignUp = () => {
     UserPool.signUp(email, password, [], null, (err, data) => {
       if (err) {
         setErrorMessage(err.message);
-        setSuccessMessage(""); // Clear success message on error
+        setSuccessMessage("");
         return;
       }
-      setErrorMessage(""); // Clear error message on success
-      setSuccessMessage("Sign Up successful!"); // Set success message
+      setErrorMessage("");
+      setSuccessMessage("Sign Up successful!");
       console.log("Signup successful:", data);
-      navigate('/log-in'); // Navigate to confirmation page
-
+      navigate('/log-in');
     });
   };
 

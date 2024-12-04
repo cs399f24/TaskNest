@@ -1,20 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Quicksand:wght@300..700&display=swap');
 
 .Home {
-    padding-top: 100px;
+  padding-top: 100px;
   background: radial-gradient(circle at 10% 20%, rgb(233, 122, 129) 0%, rgb(181, 64, 149) 100.2%);
   font-family: "Quicksand", sans-serif;
   min-height: 100vh;
   height: 100%;
+  padding-bottom: 100px;
 }
 
 .todo-task-container {
   margin: 0 auto;
   max-width: 400px;
   width: 100%;
-  height: 200px;
+  height: 240px;
   background-color: #fffffffa;
   padding-left: 20px;
+  padding-right: 20px;
   padding-top: 20px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-top-left-radius: 70px;
@@ -29,22 +31,26 @@
 }
 
 .todo-input-div {
-
+  margin: 0 auto;
   display: flex;
-  width: 90%;
+  flex-direction: column;
+
+  width: 100%;
+  margin: 0 auto;
+
   
 
 }
 
 .todo-input {
-  width: 70%;
+  margin: 0 auto;
+  width: 80%;
   height: 40px;
   border: none;
   background-color: #f1efefd1;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
   font-family: "Quicksand", sans-serif;
   font-size: 15px;
+  margin-top: 10px;
 
 }
 
@@ -52,20 +58,71 @@
   padding-left: 20px;
 }
 
+/** Different Input */
+
+.time-input-div {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  margin: 0 auto;
+
+  
+
+}
+
+.time-input {
+  margin: 0 auto;
+  width: 80%;
+  height: 40px;
+  border: none;
+  background-color: #f1efefd1;
+  font-family: "Quicksand", sans-serif;
+  font-size: 15px;
+  margin-top: 10px;
+
+}
+
+.time-input[type=text] {
+  padding-left: 20px;
+}
+
+.btn-flex-ct {
+  margin: 0 auto;
+  margin-top: 10px;
+
+  width: 90%;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+
 
 .todo-add-btn {
   height: 41px;
   max-width: 100px;
   width: 100%;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+
   background-color: rgb(255, 85, 0);
   border: none;
   color: white;
   font-size: 20px;
   font-family: "Quicksand", sans-serif;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 10px;
+  opacity: 0.9;
+  transition: 0.3s;
 
 
+}
+
+.todo-add-btn:hover {
+  opacity: 1;
 }
 
 
@@ -81,8 +138,36 @@
   width: 90%;
 }
 
+.todo-calendar-btn {
+  height: 41px;
+  max-width: 100px;
+  width: 100%;
 
-@media screen and (max-width: 1250px) {
+  background-color: rgb(255, 85, 0);
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-family: "Quicksand", sans-serif;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 10px;
+  opacity: 0.9;
+  transition: 0.3s;
+}
+
+.todo-calendar-btn:hover {
+  opacity: 1;
+}
+
+
+.calendar-container {
+  z-index: 10000000;
+}
+
+@media screen and (max-width: 1769px) {
   .todo-grid {
     grid-template-columns: repeat(4,1fr);
 
@@ -90,23 +175,25 @@
 }
 
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1435px) {
   .todo-grid {
     grid-template-columns: repeat(3,1fr);
 
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1081px) {
   .todo-grid {
     grid-template-columns: repeat(2,1fr);
 
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 695px) {
   .todo-grid {
-    grid-template-columns: repeat(1,1fr);
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }

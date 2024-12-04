@@ -5,6 +5,7 @@ def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('task-nest-users')
 
+    # Check for user_id in query string or body
     user_id = event.get('queryStringParameters', {}).get('user_id')
     if not user_id:
         try:
@@ -19,30 +20,33 @@ def lambda_handler(event, context):
             'headers': {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',  # Allow Authorization header
             },
             'body': json.dumps(["User ID is required"])
         }
 
+    # Retrieve tasks from DynamoDB for the given user_id
     response = table.get_item(Key={'user-id': user_id})
+    
     if 'Item' not in response:
         return {
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization',  # Allow Authorization header
             },
-            'body': json.dumps([])
+            'body': json.dumps([])  # No tasks found
         }
-    
+
     tasks = response['Item'].get('tasks', [])
+    
     return {
         'statusCode': 200,
         'headers': {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',  # Allow Authorization header
         },
-        'body': json.dumps(tasks)
+        'body': json.dumps(tasks)  # Return tasks
     }

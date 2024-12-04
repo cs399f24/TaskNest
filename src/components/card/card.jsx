@@ -18,6 +18,9 @@ export const Card = (props) => {
             <div className="todo-card-text">
                 <p>{props.description}</p>
             </div>
+            <div className='random-line'></div>
+            <h3 className='due-date-h3'>Due Date: {props.time}</h3>
+
         </motion.div>
     )
 }

@@ -1,9 +1,9 @@
 import json
 import boto3
+from botocore.exceptions import ClientError
 
 def lambda_handler(event, context):
-    print("Event Received: ", json.dumps(event))
-
+    
     class DynamoDB:
         def __init__(self):
             self.dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
@@ -31,12 +31,12 @@ def lambda_handler(event, context):
     if 'body' not in event or not event['body']:
         return {
             'statusCode': 400,
-            # 'headers': {
-            #     'Access-Control-Allow-Origin': '*',
-            #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            #     'Access-Control-Allow-Headers': 'Content-Type'
-            # },
-            'body': json.dumps(["Request body is missing"])  # Ensure the body is a JSON string
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
+            'body': json.dumps(["Request body is missing"])
         }
 
     if isinstance(event['body'], str):
@@ -45,43 +45,46 @@ def lambda_handler(event, context):
         except json.JSONDecodeError:
             return {
                 'statusCode': 400,
-                # 'headers': {
-                #     'Access-Control-Allow-Origin': '*',
-                #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                #     'Access-Control-Allow-Headers': 'Content-Type'
-                # },
-                'body': json.dumps(["Invalid JSON format"])  # Ensure the body is a JSON string
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type'
+                },
+                'body': json.dumps(["Invalid JSON format"])
             }
     else:
         body = event['body']
 
     db_connection = DynamoDB()
 
-    user_id = body['user_id']
     task_description = body['description']
     task_time = body['time']
     
-    if not all([task_description, task_time, user_id]):
+    if not all([task_description, task_time]):
         return {
             'statusCode': 400,
-            # 'headers': {
-            #     'Access-Control-Allow-Origin': '*',
-            #     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            #     'Access-Control-Allow-Headers': 'Content-Type'
-            # },
-            'body': json.dumps(["Description, time, and user-id are required."])  # Ensure the body is a JSON string
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            },
+            'body': json.dumps(["Description and time are required."])
         }
 
     task = {"description": task_description, "time": task_time}
     
+    user_id = body.get("user_id")
+
     db_connection.add_task(user_id, task)
+
+    task_list = db_connection.get_tasks(user_id)
 
     return {
         'statusCode': 200,
-        # 'headers': {
-        #         'Access-Control-Allow-Origin': '*',
-        #         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        #         'Access-Control-Allow-Headers': 'Content-Type'
-        # },
-        'body': "Added"
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS, GET',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        'body': json.dumps(task_list, default=str)
     }
