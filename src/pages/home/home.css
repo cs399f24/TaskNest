@@ -115,8 +115,14 @@
   justify-content: center;
   margin: 0 auto;
   margin-top: 10px;
+  opacity: 0.9;
+  transition: 0.3s;
 
 
+}
+
+.todo-add-btn:hover {
+  opacity: 1;
 }
 
 
@@ -148,6 +154,12 @@
   justify-content: center;
   margin: 0 auto;
   margin-top: 10px;
+  opacity: 0.9;
+  transition: 0.3s;
+}
+
+.todo-calendar-btn:hover {
+  opacity: 1;
 }
 
 
