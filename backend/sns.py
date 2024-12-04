@@ -61,7 +61,7 @@ def taskSubscribe(email):
 def taskReminder():
     """Send a task reminder email."""
     now = datetime.datetime.now()
-    reminder_time = task_datetime + datetime.timedelta(hours=1)
+    reminder_time = task_datetime + datetime.timedelta(minutes=1)
     delay_seconds = (reminder_time - now).total_seconds()
 
     # Ensure we don't delay for a negative time
