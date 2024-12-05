@@ -16,7 +16,7 @@ export const Home = () => {
 
 
   const region = "us-east-1";
-  const API_ID = "1r0yw16xc5";
+  const API_ID = "6tyyezvtj5";
   const stage_name = "prod";
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;
