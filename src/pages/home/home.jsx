@@ -21,12 +21,10 @@ export const Home = () => {
 
   useEffect(() => {
     const userId = localStorage.getItem("user_id");
-    const accessToken = localStorage.getItem("accessToken");
     const idToken = localStorage.getItem("idToken");
-    const emailToken = localStorage.getItem("email");
 
     setIsLoading(true);
-    if (userId || accessToken || idToken) {
+    if (userId || idToken) {
       fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
         method: 'GET',
         headers: {
@@ -69,12 +67,11 @@ export const Home = () => {
   };
 
   const updateTasks = async () => {
-    const accessToken = localStorage.getItem("accessToken");
     const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
 
     setIsLoading(true);
-    if (!userId || !accessToken) {
+    if (!userId) {
       console.error("User ID is missing. Unable to fetch tasks.");
       return;
     }

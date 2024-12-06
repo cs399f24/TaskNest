@@ -17,7 +17,7 @@ function Navbar() {
     useEffect(() => {
         const interval = setInterval(() => {
             setIsLoggedIn(!!localStorage.getItem("user_id"));
-        }, 1000);
+        }, 0.01);
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, []);
