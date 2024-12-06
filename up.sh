@@ -1,8 +1,9 @@
 #!/bin/bash
 
+ # Change to your preferred region, bucket name, and Amplify app name
 BUCKET_NAME="task-nest-test-bucket-1"
 AMPLIFY_APP_NAME="task-nest-app"
-REGION="us-east-1" # Change to your preferred region
+REGION="us-east-1"
 
 # Ensure the S3 bucket exists
 if ! aws s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1; then

@@ -2,18 +2,13 @@ import { useState,useEffect } from 'react';
 import styles from './Navbar.module.css';
 import logo from '../../assets/logo.png'
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
-
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
-
 
     const [isActive, setIsActive] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
-
-
 
     const toggleActiveClass = () => {
         setIsActive(!isActive);
@@ -32,10 +27,6 @@ function Navbar() {
         setIsLoggedIn(false); // Update isLoggedIn state
         navigate('/log-in'); // Redirect to the home page
     };
-
-
-
-
 
     return (
         <div className={styles.main}>

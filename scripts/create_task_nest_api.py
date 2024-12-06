@@ -8,12 +8,12 @@ response = client.get_rest_apis()
 apis = response.get('items', [])
 
 for api in apis:
-    if api.get('name') == 'task_nest_rest_api':
+    if api.get('name') == 'task_nest_rest_api_1':
         print('API already exists')
         sys.exit(0)
 
 response = client.create_rest_api(
-    name='task_nest_rest_api',
+    name='task_nest_rest_api_1',
     description='API to manage tasks.',
     endpointConfiguration={
         'types': [
@@ -40,7 +40,6 @@ if not user_pools:
     raise Exception("No user pools found in this account.")
 
 user_pool_id = next(pool['Id'] for pool in user_pools if pool['Name'] == 'task-nest-user-pool')
-client_id = next(client['ClientId'] for client in user_pools if client['Name'] == 'task-nest')
 
 if user_pool_id is None:
     user_pool = cognito_client.create_user_pool(
@@ -56,12 +55,7 @@ if user_pool_id is None:
         }
     )
     user_pool_id = user_pool['UserPool']['Id']
-    
-    user_pool_client = cognito_client.create_user_pool_client(
-        UserPoolId=user_pool_id,
-        ClientName='task-nest'
-    )
-    client_id = user_pool_client['UserPoolClient']['ClientId']
+    print(f"User pool created with ID: {user_pool_id}")
 
 cognito_user_pool_arn = f"arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}"
 
@@ -305,10 +299,11 @@ delete_resource = client.create_resource(
 )
 delete_resource_id = delete_resource["id"]
 
+# Define the DELETE method for /delete
 delete_method = client.put_method(
     restApiId=api_id,
     resourceId=delete_resource_id,
-    httpMethod='DELETE',
+    httpMethod='POST',
     authorizationType='COGNITO_USER_POOLS',
     authorizerId=authorizer_id,
     requestParameters={
@@ -317,10 +312,11 @@ delete_method = client.put_method(
     }
 )
 
+# Method response for DELETE
 delete_response = client.put_method_response(
     restApiId=api_id,
     resourceId=delete_resource_id,
-    httpMethod='DELETE',
+    httpMethod='POST',
     statusCode='200',
     responseParameters={
         'method.response.header.Access-Control-Allow-Headers': True,
@@ -332,18 +328,20 @@ delete_response = client.put_method_response(
     }
 )
 
+# Get the Lambda function ARN for delete_task function
 lambda_arn = lambda_client.get_function(FunctionName='delete_task')['Configuration']['FunctionArn']
 uri = f'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/{lambda_arn}/invocations'
 
 if lambda_arn is None:
-    raise Exception("No Lambda function found, make sure lambda function delete_task exists")
+    raise Exception("No Lambda function found, make sure the lambda function delete_task exists")
 
+# Create the integration for DELETE method
 delete_integration = client.put_integration(
     restApiId=api_id,
     resourceId=delete_resource_id,
-    httpMethod='DELETE',
-    credentials=lab_role,
-    integrationHttpMethod='DELETE',
+    httpMethod='POST',
+    credentials=lab_role,  # IAM role that grants API Gateway permission to invoke Lambda
+    integrationHttpMethod='POST',
     type='AWS',
     uri=uri,
     requestTemplates={
@@ -351,28 +349,28 @@ delete_integration = client.put_integration(
     }
 )
 
+# Integration response for DELETE method
 delete_integration_response = client.put_integration_response(
     restApiId=api_id,
     resourceId=delete_resource_id,
-    httpMethod='DELETE',
+    httpMethod='POST',
     statusCode='200',
     responseParameters={
         'method.response.header.Access-Control-Allow-Headers': '\'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token\'',
-        'method.response.header.Access-Control-Allow-Methods': '\'DELETE,OPTIONS\'',
+        'method.response.header.Access-Control-Allow-Methods': '\'POST,OPTIONS\'',
         'method.response.header.Access-Control-Allow-Origin': '\'*\'' 
     }
 )
 
-# Now /delete preflight
-
-delete_method = client.put_method(
+# Now, configure CORS (OPTIONS) preflight for /delete
+delete_method_options = client.put_method(
     restApiId=api_id,
     resourceId=delete_resource_id,
     httpMethod='OPTIONS',
     authorizationType='NONE'
 )
 
-delete_response = client.put_method_response(
+delete_response_options = client.put_method_response(
     restApiId=api_id,
     resourceId=delete_resource_id,
     httpMethod='OPTIONS',
@@ -387,7 +385,7 @@ delete_response = client.put_method_response(
     }
 )
 
-delete_integration = client.put_integration(
+delete_integration_options = client.put_integration(
     restApiId=api_id,
     resourceId=delete_resource_id,
     httpMethod='OPTIONS',
@@ -397,25 +395,24 @@ delete_integration = client.put_integration(
     }
 )
 
-delete_integration_response = client.put_integration_response(
+delete_integration_response_options = client.put_integration_response(
     restApiId=api_id,
     resourceId=delete_resource_id,
     httpMethod='OPTIONS',
     statusCode='200',
     responseParameters={
         'method.response.header.Access-Control-Allow-Headers': '\'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token\'',
-        'method.response.header.Access-Control-Allow-Methods': '\'DELETE,OPTIONS\'',
+        'method.response.header.Access-Control-Allow-Methods': '\'POST,OPTIONS\'',
         'method.response.header.Access-Control-Allow-Origin': '\'*\'' 
     }
 )
 
+# Deploy the API
 deployment = client.create_deployment(
     restApiId=api_id,
     stageName='prod'
 )
 
 print(f'API created successfully: {api_id}, deployment: prod')
-with open("../env", "a") as file:
-    file.write(f"REACT_APP_API_ID={api_id}\n")
-    file.write(f"REACT_APP_USER_POOL_ID={user_pool_id}\n")
-    file.write(f"REACT_APP_REGION_CLIENT_ID={client_id}\n")
+with open("../.env", "a") as file:
+    file.write(f"API_ID={api_id}\n")
