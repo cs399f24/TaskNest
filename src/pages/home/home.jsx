@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Card } from '../../components/card/card';
 import './home.css';
-import { desc } from 'framer-motion/client';
 import CalendarComponent from '../../components/calendar/calendar';
 import 'react-calendar/dist/Calendar.css';
 
@@ -13,6 +11,7 @@ export const Home = () => {
   const [newTodo, setNewTodo] = useState("");
   const [value, onChange] = useState(new Date());
   const [calendar, showCalendar] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const region = "us-east-1";
   const API_ID = "y0opv3uf4c";
@@ -26,6 +25,7 @@ export const Home = () => {
     const idToken = localStorage.getItem("idToken");
     const emailToken = localStorage.getItem("email");
 
+    setIsLoading(true);
     if (userId || accessToken || idToken) {
       fetch(`${backendUrl}/tasks?user_id=${encodeURIComponent(userId)}`, {
         method: 'GET',
@@ -61,13 +61,19 @@ export const Home = () => {
     } else {
       window.location.href = '/log-in';
     }
+    setIsLoading(false);
   }, []);
+
+  const calendarToggle = () => {
+    showCalendar(!calendar);
+  };
 
   const updateTasks = async () => {
     const accessToken = localStorage.getItem("accessToken");
     const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
 
+    setIsLoading(true);
     if (!userId || !accessToken) {
       console.error("User ID is missing. Unable to fetch tasks.");
       return;
@@ -102,20 +108,18 @@ export const Home = () => {
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }
+    setIsLoading(false);
   };
 
   const createNewTask = async () => {
-    const accessToken = localStorage.getItem("accessToken");
     const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
-    const emailToken = localStorage.getItem("email");
 
-    const currentDate = new Date();
-    const timeDifference = value.getTime() - currentDate.getTime();
-    const adjustedDate = new Date(currentDate.getTime() + timeDifference);
-    const adjustedDateString = adjustedDate.toISOString().replace('Z', '');
-    const timeTill = adjustedDateString;
+    const time = value.getTime();
+    console.log('Time:', time);
+    const timeAdj = new Date(time).toISOString().replace('Z', '');
 
+    setIsLoading(true);
     if (newTodo !== '' && userId) {
       try {
         const response = await fetch(`${backendUrl}/add`, {
@@ -127,7 +131,7 @@ export const Home = () => {
           body: JSON.stringify({
             user_id: userId,
             description: newTodo,
-            time: timeTill,
+            time: timeAdj,
             idToken: idToken
           }),
           mode: 'cors',
@@ -145,12 +149,14 @@ export const Home = () => {
         console.error('Error adding task:', error);
       }
     }
+    setIsLoading(false);
   };
 
   const deleteTask = async (description) => {
     const idToken = localStorage.getItem("idToken");
     const userId = localStorage.getItem("user_id");
 
+    setIsLoading(true);
     if (!userId) {
       console.error('User ID is not available.');
       return;
@@ -177,10 +183,11 @@ export const Home = () => {
     } catch (error) {
       console.error('Error deleting task:', error);
     }
+    setIsLoading(false);
   };
 
   return (
-    <div className="Home">
+    <div className='Home' style={{cursor: isLoading ? "wait" : "default"}}>
       <motion.div
         className="todo-task-container"
         initial={{ opacity: 0, y: -100 }}
@@ -196,9 +203,10 @@ export const Home = () => {
             value={newTodo}
             placeholder="Add Tasks Here"
           />
+          
           <div className='btn-flex-ct'>
             <button className="todo-add-btn" onClick={createNewTask}>Add</button>
-            {/* <button onClick={calendarToggle} className='todo-calendar-btn'>Date</button> */}
+            <button onClick={calendarToggle} className='todo-calendar-btn'>Date</button>
           </div>
 
           {calendar && <motion.div
@@ -207,34 +215,28 @@ export const Home = () => {
             animate={{ opacity: 1, scale: 1, y: 10 }}
             transition={{ duration: 0.8 }}
           > <CalendarComponent value={value} onChange={onChange} />
-          </motion.div>
-          }
+          </motion.div>}
         </div>
       </motion.div>
 
       <div className="todo-grid">
         {tasks.map((task, index) => {
-          // Calculate the difference in days between the current date and the task date
-          // const taskDate = new Date(task.time);
-          const currentDate = new Date();
-          // const timeDifference = taskDate - currentDate;
-          // const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-
+          const dueDate = new Date(task.time).toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+          });
           return (
             <Card
               key={index}
               number={index + 1}
               deleteTask={() => deleteTask(task.description)}
               description={task.description}
-              // time={daysRemaining > 0
-              //   ? `${daysRemaining} day${daysRemaining > 1 ? 's' : ''} left`
-              //   : 'Due today or overdue'}
-              time={currentDate.toDateString()}
+              time={dueDate}
             />
           );
         })}
       </div>
-
     </div>
   );
 }

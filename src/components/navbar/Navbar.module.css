@@ -6,21 +6,13 @@
   box-sizing: border-box;
   text-decoration: none;
   font-style: none;
-
 }
-
-
 
 .main {
   width: 100%;
   font-family: "Quicksand", sans-serif;
   letter-spacing: 0px;
-
-
-
 }
-
-
 
 .navbar-header {
   width: 100%;
@@ -42,8 +34,6 @@
     padding-bottom: 30px;
     position: absolute;
   ;
-
-
   }
 
   .absolute {
@@ -62,17 +52,12 @@
     position: relative; /* Add this */
     font-family: "Quicksand", sans-serif;
     transform-origin: center center; /* Ensure rotation happens around the center */
-
-
-
-
   }
   
   .logo img {
     width: 50px;
     height: 50px;
     display: block; /* Ensures the image is treated as a block element */
-
   }
   
   .logo h3 {
@@ -84,7 +69,7 @@
   display: flex;
   list-style: none;
   gap: 20px;
-align-items: center;
+  align-items: center;
 }
 
 .navLink {
@@ -95,7 +80,6 @@ align-items: center;
   font-weight: 800;
   letter-spacing: 1px;
   cursor: pointer;
-
 }
 
 li:nth-of-type(2) {
@@ -103,8 +87,6 @@ li:nth-of-type(2) {
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;
-
-
 }
 
 button {
@@ -126,13 +108,7 @@ button {
 .navMenu {
   margin-right: 100px;
 }
-
-
-
-
-
   /* media queries */
-  
   @media screen and (max-width: 780px){
 
     .logo {
@@ -163,14 +139,10 @@ button {
 
       .navbar-change img {
         filter: none;
-
-
         }
 
         .navbar-change a {
           color: white;
-  
-  
           }
       
     
@@ -180,7 +152,6 @@ button {
       cursor: pointer;
       color: white;
     }
-
   
     .bar {
           background-color: #ffffff;
@@ -202,10 +173,8 @@ button {
     .hamburger.active .bar:nth-child(3){
       transform: translateY(-8px) rotate(-45deg);
     }
-  
-  
+
     /* navMenu */
-  
     .navMenu{
       position: absolute;
       flex-direction: column;
@@ -220,7 +189,6 @@ button {
       margin-top: 0px;
       padding: 20px;
       margin-right: 0px;
-
         }
   
     .navMenu.active{
@@ -235,8 +203,5 @@ button {
     .navbar {
         backdrop-filter: blur(0px);
         background-color: rgba(0, 0, 0, 0.4);
-
     }
-
-   
   }

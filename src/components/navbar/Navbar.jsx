@@ -24,6 +24,8 @@ function Navbar() {
 
     const handleLogout = () => {
         localStorage.removeItem("user_id"); // Clear user_id from localStorage
+        localStorage.removeItem("accessToken"); // Clear accessToken from localStorage
+        localStorage.removeItem("idToken"); // Clear idToken from localStorage
         setIsLoggedIn(false); // Update isLoggedIn state
         navigate('/log-in'); // Redirect to the home page
     };
@@ -55,9 +57,7 @@ function Navbar() {
                                 </li>
                             </>
                         )}
-
                     </ul>
-
                     <div
                         className={`${styles.hamburger} ${isActive ? styles.active : ''}`}
                         onClick={toggleActiveClass}
