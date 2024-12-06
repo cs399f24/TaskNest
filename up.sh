@@ -1,12 +1,16 @@
 #!/bin/bash
 
 BUCKET_NAME="task-nest-test-bucket-1"
+AMPLIFY_APP_NAME="task-nest-app"
+REGION="us-east-1" # Change to your preferred region
 
+# Ensure the S3 bucket exists
 if ! aws s3 ls "s3://$BUCKET_NAME" > /dev/null 2>&1; then
     echo "Bucket '$BUCKET_NAME' does not exist. Please create it or specify an existing bucket."
     exit 1
 fi
 
+# Run DynamoDB and Lambda setup scripts
 if [ -d "scripts" ]; then
     cd scripts
     if [ -f "./create_dynamoDB.sh" ]; then
@@ -22,6 +26,7 @@ else
     exit 1
 fi
 
+# Create virtual environment and install dependencies
 python3 -m venv .venv || { echo "Failed to create virtual environment"; exit 1; }
 ./.venv/bin/pip install boto3 awscli || { echo "Failed to install Python dependencies"; exit 1; }
 
@@ -50,3 +55,35 @@ else
     echo "Build directory not found. Ensure 'npm run build' generates a 'build' folder."
     exit 1
 fi
+
+# Initialize Amplify App
+echo "Initializing Amplify app..."
+if ! command -v amplify &> /dev/null; then
+    echo "Amplify CLI not found. Install it using 'npm install -g @aws-amplify/cli'."
+    exit 1
+fi
+
+amplify init --app "$AMPLIFY_APP_NAME" --envName prod --region "$REGION" --yes || {
+    echo "Failed to initialize Amplify app.";
+    exit 1;
+}
+
+# Add hosting to Amplify
+echo "Adding Amplify hosting..."
+amplify add hosting \
+    --bucketName "$BUCKET_NAME" \
+    --indexDocument "index.html" \
+    --errorDocument "index.html" \
+    --yes || {
+    echo "Failed to add Amplify hosting.";
+    exit 1;
+}
+
+# Publish the Amplify app
+echo "Publishing Amplify app..."
+amplify publish --yes || {
+    echo "Failed to publish Amplify app.";
+    exit 1;
+}
+
+echo "Amplify app created and published successfully!"
