@@ -18,7 +18,8 @@ else
         --table-name "$TABLE_NAME" \
         --attribute-definitions AttributeName="$PARTITION_KEY",AttributeType="$ATTRIBUTE_TYPE" \
         --key-schema AttributeName="$PARTITION_KEY",KeyType=HASH \
-        --provisioned-throughput ReadCapacityUnits="$PROVISIONED_READ_UNITS",WriteCapacityUnits="$PROVISIONED_WRITE_UNITS"
+        --provisioned-throughput ReadCapacityUnits="$PROVISIONED_READ_UNITS",WriteCapacityUnits="$PROVISIONED_WRITE_UNITS" \
+        > /dev/null 2>&1
 
     if [ $? -eq 0 ]; then
         echo "DynamoDB table '$TABLE_NAME' created successfully."

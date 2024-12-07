@@ -12,9 +12,9 @@ if [ -z "$ROLE" ]; then
 fi
 
 cd add_task_lambda
-pip install pyjwt -t .
+pip install pyjwt==2.10.1 -t . > /dev/null 2>&1
 
-zip -r ../add_task_lambda.zip .
+zip -r ../add_task_lambda.zip . > /dev/null 2>&1
 
 aws lambda create-function --function-name add_task \
     --runtime python3.9 \

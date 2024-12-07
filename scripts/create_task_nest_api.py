@@ -33,16 +33,12 @@ sts_client = boto3.client('sts')
 account_id = sts_client.get_caller_identity()['Account']
 region = 'us-east-1'
 
-response = cognito_client.list_user_pools(MaxResults=10)
+response = cognito_client.list_user_pools(MaxResults=60)
 user_pools = response.get('UserPools', [])
 
-if not user_pools:
-    raise Exception("No user pools found in this account.")
+user_pool = next((pool for pool in user_pools if pool['Name'] == 'task-nest-user-pool'), None)
 
-user_pool_id = next(pool['Id'] for pool in user_pools if pool['Name'] == 'task-nest-user-pool')
-client_id = cognito_client.list_user_pool_clients(UserPoolId=user_pool_id)['UserPoolClients'][0]['ClientId']
-
-if user_pool_id is None:
+if user_pool is None:
     user_pool = cognito_client.create_user_pool(
         PoolName='task-nest-user-pool',
         Policies={
@@ -53,27 +49,36 @@ if user_pool_id is None:
                 'RequireNumbers': True,
                 'RequireSymbols': True
             }
-        }
+        },
+        AutoVerifiedAttributes=['email'],
+        MfaConfiguration='OFF',
     )
     user_pool_id = user_pool['UserPool']['Id']
     print(f"User pool created with ID: {user_pool_id}")
+else:
+    user_pool_id = user_pool['Id']
+    print(f"User pool found with ID: {user_pool_id}")
+
+up_clients = cognito_client.list_user_pool_clients(UserPoolId=user_pool_id)['UserPoolClients']
+client_id = next((up_client['ClientId'] for up_client in up_clients if up_client['ClientName'] == 'task-nest-client'), None)
 
 if client_id is None:
-    client = cognito_client.create_user_pool_client(
+    cog_client = cognito_client.create_user_pool_client(
         UserPoolId=user_pool_id,
         ClientName='task-nest-client',
         GenerateSecret=False,
-        ReadAttributes=[
-            'email'
-        ],
+        ReadAttributes=['email'],
         RefreshTokenValidity=30,
         ExplicitAuthFlows=[
             'ALLOW_USER_PASSWORD_AUTH',
-            'ALLOW_REFRESH_TOKEN_AUTH'
+            'ALLOW_REFRESH_TOKEN_AUTH',
+            'ALLOW_USER_SRP_AUTH',
         ]
     )
-    client_id = client['UserPoolClient']['ClientId']
+    client_id = cog_client['UserPoolClient']['ClientId']
     print(f"User pool client created with ID: {client_id}")
+else:
+    print(f"User pool client found with ID: {client_id}")
 
 cognito_user_pool_arn = f"arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}"
 

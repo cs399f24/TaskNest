@@ -37,9 +37,6 @@
 
   width: 100%;
   margin: 0 auto;
-
-  
-
 }
 
 .todo-input {
@@ -51,7 +48,6 @@
   font-family: "Quicksand", sans-serif;
   font-size: 15px;
   margin-top: 10px;
-
 }
 
 .todo-input[type=text] {
@@ -67,9 +63,6 @@
 
   width: 100%;
   margin: 0 auto;
-
-  
-
 }
 
 .time-input {
@@ -81,7 +74,6 @@
   font-family: "Quicksand", sans-serif;
   font-size: 15px;
   margin-top: 10px;
-
 }
 
 .time-input[type=text] {
@@ -96,8 +88,6 @@
   display: flex;
   justify-content: space-evenly;
 }
-
-
 
 .todo-add-btn {
   height: 41px;
@@ -117,23 +107,18 @@
   margin-top: 10px;
   opacity: 0.9;
   transition: 0.3s;
-
-
 }
 
 .todo-add-btn:hover {
   opacity: 1;
 }
 
-
-
-
 .todo-grid {
   margin: 0 auto;
   margin-top: 100px;
 
   display: grid;
-  grid-template-columns: repeat(5,1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 40px;
   width: 90%;
 }
@@ -162,14 +147,13 @@
   opacity: 1;
 }
 
-
 .calendar-container {
   z-index: 10000000;
 }
 
 @media screen and (max-width: 1769px) {
   .todo-grid {
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: repeat(4, 1fr);
 
   }
 }
@@ -177,14 +161,14 @@
 
 @media screen and (max-width: 1435px) {
   .todo-grid {
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
 
   }
 }
 
 @media screen and (max-width: 1081px) {
   .todo-grid {
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
 
   }
 }

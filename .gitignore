@@ -9,3 +9,10 @@ node_modules
 
 # envs
 .env
+
+# dependencies
+scripts/add_task_lambda/jwt
+scripts/add_task_lambda/PyJWT-2.10.1.dist-info
+
+# build
+build

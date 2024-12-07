@@ -14,7 +14,7 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const region = "us-east-1";
-  const API_ID = "y0opv3uf4c";
+  const API_ID = process.env.REACT_APP_API_ID ? process.env.REACT_APP_API_ID : "y0opv3uf4c";
   const stage_name = "prod";
 
   let backendUrl = `https://${API_ID}.execute-api.${region}.amazonaws.com/${stage_name}`;

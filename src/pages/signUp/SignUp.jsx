@@ -14,7 +14,10 @@ export const SignUp = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    UserPool.signUp(email, password, [], null, (err, data) => {
+    const userAttributes = [
+      { Name: 'email', Value: email }
+    ];
+    UserPool.signUp(email, password, userAttributes, null, (err, data) => {
       if (err) {
         setErrorMessage(err.message);
         setSuccessMessage("");
