@@ -6,6 +6,28 @@ A robust web-based task management application that helps users organize and tra
   <img src="https://github.com/user-attachments/assets/ba11aa6d-223c-4e1e-81e3-1eabb871902b" alt="GIF">
 </p>
 
+## Documentation
+
+- Located ad `@/docs/`
+
+## Deployment
+- `@` in a file path is referring to the root of the project
+- `<Your-Bucket-Name-Here>` when seeing this replace everything including the `<` and `>`.
+
+###### 1. Create s3 bucket with: `@/scripts/create_s3.sh` or according to the documentation.
+
+###### 2. Run up script at `@/up.sh`.
+- Make sure AWS ClI is installed and configured
+
+###### 3. Create a Amplify app on the AWS management console
+- Steps:
+    - Click create new app
+    - Click deploy without git
+    - type in `s3://<Your-Bucket-Name-Here>/`
+
+## Destruction
+###### Run the destroy script `@/scripts/destroy_everything.sh`
+
 ## 🌟 Features
 
 - User authentication and authorization
