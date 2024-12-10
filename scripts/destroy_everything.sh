@@ -23,5 +23,9 @@ echo "DESTROYED... COGNITO USER POOL"
 echo "DESTROYED... LAMBDAS"
 ./destroy_sns_topic.sh > /dev/null 2>&1
 echo "DESTROYED... SNS TOPIC"
+if [ -f "../.env" ]; then
+    rm -rf ../.env
+    echo "DESTROYED... .ENV FILE"
+fi
 
 echo "DESTROYED... EVERYTHING"

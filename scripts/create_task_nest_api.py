@@ -8,7 +8,7 @@ response = client.get_rest_apis()
 apis = response.get('items', [])
 
 for api in apis:
-    if api.get('name') == 'task_nest_rest_api_1':
+    if api.get('name') == 'task_nest_rest_api':
         print('API already exists')
         sys.exit(0)
 
