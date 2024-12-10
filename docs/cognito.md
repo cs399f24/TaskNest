@@ -1,6 +1,7 @@
 
-# AWS Cognito 
-
+# AWS Cognito
+- Created in `create_task_nest_api.py` if not already created.
+## Creation:
 1. **Access AWS Console**
    - Navigate to AWS Console
    - Click on User pools
@@ -29,9 +30,6 @@
    
 8. **Review and create**
     - You should be good now and can press create user pool
-   
-   
-
 
 ## For The React Integration
 
@@ -51,7 +49,3 @@ const poolData = {
 
 export default new CognitoUserPool(poolData);
 ```
-
-
-
-

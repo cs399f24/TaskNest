@@ -23,6 +23,10 @@ if [ -d "scripts" ]; then
     if [ -f "./create_lambdas.sh" ]; then
         ./create_lambdas.sh || { echo "Failed to execute create_lambdas.sh"; exit 1; }
     fi
+
+    if [ -f "./create_sns_topic.sh" ]; then
+        ./create_sns_topic.sh || { echo "Failed to execute create_sns_topic.sh"; exit 1; }
+    fi
 else
     echo "Scripts directory not found!"
     exit 1

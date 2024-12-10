@@ -1,5 +1,6 @@
 # DynamoDB Setup
-
+- Created in `create_dynamoDB.sh` if not already created.
+## Creation
 1. **Open DynamoDB**
    - Search for DynamoDB using the search bar next to services.
 
@@ -12,7 +13,7 @@
    - Use **Default settings**.
    - Select "Create table" to finish.
 
-3. **Setting up DynamoDB within your code**
+3. **Setting up DynamoDB within the code**
    - Install Boto3:
      ```bash
      pip install boto3
@@ -25,4 +26,3 @@
      dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
      table = dynamodb.Table('YourTableName')
      ```
-

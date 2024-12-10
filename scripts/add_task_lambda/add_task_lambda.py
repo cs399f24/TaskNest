@@ -8,7 +8,7 @@ import time
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 sns_client = boto3.client('sns', region_name='us-east-1')
 
-TOPIC_ARN = 'arn:aws:sns:us-east-1:507920085099:TaskNoti'
+TOPIC_NAME = "task-notification"
 
 def lambda_handler(event, context):
     start_time = time.time()
@@ -37,9 +37,10 @@ def lambda_handler(event, context):
 
     if email:
         try:
-            subscribe_to_sns_topic(email)
-            # Send message immediately after subscribing
-            send_task_notification(task_description)
+            topic_arn = get_topic_arn_by_name(TOPIC_NAME)
+            if topic_arn and not is_already_subscribed(email, topic_arn):
+                subscribe_to_sns_topic(email, topic_arn)
+            send_task_notification(task_description, topic_arn)
         except ClientError as e:
             return respond_with_error(f"Error subscribing email to SNS topic: {str(e)}")
     else:
@@ -90,25 +91,41 @@ def respond_with_error(message):
         'body': json.dumps([message])
     }
 
-def subscribe_to_sns_topic(email):
+def get_topic_arn_by_name(topic_name):
+    response = sns_client.list_topics()
+    topics = response.get('Topics', [])
+
+    for topic in topics:
+        if topic_name in topic['TopicArn']:
+            return topic['TopicArn']
+    return None
+
+def is_already_subscribed(email, topic_arn):
+    response = sns_client.list_subscriptions_by_topic(TopicArn=topic_arn)
+    for subscription in response.get('Subscriptions', []):
+        if subscription['Endpoint'] == email and subscription['Protocol'] == 'email':
+            return True
+    return False
+
+def subscribe_to_sns_topic(email, topic_arn):
     sns_client.subscribe(
-        TopicArn=TOPIC_ARN,
+        TopicArn=topic_arn,
         Protocol='email',
         Endpoint=email
     )
-    send_welcome_message()
+    send_welcome_message(topic_arn)
 
-def send_welcome_message():
+def send_welcome_message(topic_arn):
     sns_client.publish(
-        TopicArn=TOPIC_ARN,
+        TopicArn=topic_arn,
         Message="Thank you for subscribing to TaskNest's push notifications system!",
         Subject='Welcome to TaskNest'
     )
 
-def send_task_notification(task_description):
+def send_task_notification(task_description, topic_arn):
     sns_client.publish(
-        TopicArn=TOPIC_ARN,
-        Message=f"Task Reminder: {task_description}",
+        TopicArn=topic_arn,
+        Message=f"Task Added: {task_description}",
         Subject="New Task Added"
     )
     print(f"Task notification sent: {task_description}")

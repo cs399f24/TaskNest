@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Edit to your specifications
-BUCKET_NAME="sliztastico"
+BUCKET_NAME="<replace with actual name>"
 REGION="us-east-1"
 INDEX_FILE_PATH="index.html"
 

@@ -7,10 +7,7 @@ if [ "$CONFIRM" != "yes" ]; then
     exit 0
 fi
 
-if [ ! -d "scripts" ]; then
-    echo "Please run this script from the root directory of the project."
-    exit 1
-else
+if [ -d "scripts" ]; then
     cd scripts
 fi
 
@@ -24,5 +21,7 @@ echo "DESTROYED... API GATEWAY"
 echo "DESTROYED... COGNITO USER POOL"
 ./destroy_lambdas.sh > /dev/null 2>&1
 echo "DESTROYED... LAMBDAS"
+./destroy_sns_topic.sh > /dev/null 2>&1
+echo "DESTROYED... SNS TOPIC"
 
 echo "DESTROYED... EVERYTHING"
